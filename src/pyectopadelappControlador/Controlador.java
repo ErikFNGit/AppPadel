@@ -62,6 +62,19 @@ public class Controlador {
         errorNewUsu.setVisible(true);
         errorNewUsu.setLocationRelativeTo(null);
     }
+    //Ventana confirmacion usuario y su codigo:
+    public static void confirmationCreateUser(){
+        newUsu.setVisible(false);
+        confirmAlta.setVisible(true);
+        confirmAlta.setLocationRelativeTo(null);
+    }
+    //Resetear los valores de texto en los campos de añadir usuario
+    public static void resetValuesAddUser(){
+        newUsu.AltaUsuDNI.setText("");
+        newUsu.AltaUsuName.setText("");
+        newUsu.AltaUsuSurname.setText("");
+        newUsu.AltaUsuMail.setText("");
+    }
     // funcion para registrar nuevos usuarios
     public static void createUser() throws SQLException{
         newUsu.setTitle("Nuevo usuario");
@@ -84,11 +97,28 @@ public class Controlador {
             System.out.println("Añadidas correctamente: "+addedRows);
             //Aqui hay que añadir para que inicie el controlador, para que resetee
             //los values y se esconda la ventana y salga la de confirmacion de alta
+            String dniBuscar = newUsu.AltaUsuDNI.getText();
+            Controlador.generatedUserCod(dniBuscar);
+            Controlador.resetValuesAddUser();
+           
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
+            errorNewUsu.setTitle("ERROR");
             Controlador.errorCreateUser();
         }
-        
     }
-    
+    public static void generatedUserCod(String dniBuscar)throws SQLException{
+        confirmAlta.setTitle("Codigo de usuario");
+        Controlador.confirmationCreateUser();
+        try{
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+            String query="SELECT userCode FROM users WHERE dni='"+dniBuscar+"':";
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            int codigoUser = result.getInt("userCode");
+            confirmAlta.uCode.setText(""+codigoUser);
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
+        }
+    }
 }
