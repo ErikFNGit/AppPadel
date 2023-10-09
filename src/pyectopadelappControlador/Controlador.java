@@ -15,8 +15,10 @@ import pyectopadelappVista.EditPista;
 import pyectopadelappVista.EditUsu;
 import pyectopadelappVista.ErrorAltaUsuario;
 import pyectopadelappVista.Login;
+import pyectopadelappVista.MenuUsuario;
 import pyectopadelappVista.SeleccionPistaYMes;
 import pyectopadelappVista.PerfilUsuario;
+
 
 
 
@@ -25,8 +27,42 @@ public class Controlador {
     public static Users usu = new Users();
     public static AltaUsu newUsu = new AltaUsu();
     public static AltaPista newField = new AltaPista();
-
+    public static AdminPrincipal adminIndex = new AdminPrincipal();
+    public static ConfirmacionAlta confirmAlta = new ConfirmacionAlta();
+    public static EditPista editField = new EditPista();
+    public static EditUsu editUsu = new EditUsu();
+    public static ErrorAltaUsuario errorNewUsu = new ErrorAltaUsuario();
+    public static Login login = new Login();
+    public static MenuUsuario menuUsu = new MenuUsuario();
+    public static SeleccionPistaYMes selectFieldMonth = new SeleccionPistaYMes();
+    public static PerfilUsuario profileUsu = new PerfilUsuario();
     
+    
+    //Funcion para iniciar el programa
+    public static void start(){
+        login.setTitle("Login");
+        login.setVisible(true);
+        login.setLocationRelativeTo(null);
+    }
+    //Menu Principal del Admin
+    public static void adminMenu(){
+        login.setVisible(false);
+        adminIndex.setVisible(true);
+        adminIndex.setLocationRelativeTo(null);
+    }
+    //Abrir ventana registrar nuevo usuario
+    public static void addUsu(){
+        adminIndex.setVisible(false);
+        newUsu.setVisible(true);
+        newUsu.setLocationRelativeTo(null);
+    }
+    //Ventana error usuario
+    public static void errorCreateUser(){
+        newUsu.setVisible(false);
+        errorNewUsu.setVisible(true);
+        errorNewUsu.setLocationRelativeTo(null);
+    }
+    // funcion para registrar nuevos usuarios
     public static void createUser() throws SQLException{
         newUsu.setTitle("Nuevo usuario");
         usu.setUserDNI(newUsu.AltaUsuDNI.getText());
@@ -50,6 +86,7 @@ public class Controlador {
             //los values y se esconda la ventana y salga la de confirmacion de alta
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
+            Controlador.errorCreateUser();
         }
         
     }
