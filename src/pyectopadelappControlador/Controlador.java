@@ -75,6 +75,34 @@ public class Controlador {
         newUsu.AltaUsuSurname.setText("");
         newUsu.AltaUsuMail.setText("");
     }
+    //Inicio de de sesion y comprobacion de rol
+    public static void login()throws SQLException{
+        String dniLogin = login.LogInDNI.getText();
+        String codigoLogin = login.LogInPass.getText();
+        try{
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+            String query = "SELECT status, isAdmin FROM users where dni='"+dniLogin+"'AND userCode='"+codigoLogin+"';";
+            Statement state= con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            if(result.next()){
+                if (result.getInt("status")==1){
+                    if(result.getInt("isAdmin")==1){
+                        adminIndex.setTitle("Centro de administracion");
+                        login.setVisible(false);
+                        adminIndex.setVisible(true);                    
+                    }else{
+                        menuUsu.setTitle("Menu Principal");
+                        login.setVisible(false);
+                        menuUsu.setVisible(true);
+                    }
+                }
+            }else{
+                System.out.println("Usuario o contraseña incorrecto");
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
+        }
+    }
     // funcion para registrar nuevos usuarios
     public static void createUser() throws SQLException{
         newUsu.setTitle("Nuevo usuario");
@@ -107,12 +135,13 @@ public class Controlador {
             Controlador.errorCreateUser();
         }
     }
+    //Muestra el codigo del usuario registrador
     public static void generatedUserCod(String dniBuscar)throws SQLException{
         confirmAlta.setTitle("Codigo de usuario");
         Controlador.confirmationCreateUser();
         try{
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
-            String query="SELECT userCode FROM users WHERE dni='"+dniBuscar+"':";
+            String query="SELECT userCode FROM users WHERE dni='"+dniBuscar+"';";
             Statement state = con.createStatement();
             ResultSet result = state.executeQuery(query);
             int codigoUser = result.getInt("userCode");
@@ -121,4 +150,5 @@ public class Controlador {
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
         }
     }
+    
 }
