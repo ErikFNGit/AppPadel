@@ -1,17 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package pyectopadelapp.Controlador;
+package pyectopadelappControlador;
 
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import pyectopadelappModelo.Pistas;
+import pyectopadelappModelo.Users;
 
 
 public class Controlador {
+    public static Pistas field = new Pistas();
+    public static Users usu = new Users();
+    
+    
+    
+    
     public static void conectar()throws SQLException{
         try{
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
