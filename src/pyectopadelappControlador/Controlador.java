@@ -7,13 +7,15 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import pyectopadelappModelo.Pistas;
 import pyectopadelappModelo.Users;
+import pyectopadelappVista.AltaUsu;
+import pyectopadelappVista.AltaPista;
 
 
 public class Controlador {
     public static Pistas field = new Pistas();
     public static Users usu = new Users();
-    
-    
+    public static AltaUsu newUsu = new AltaUsu();
+    public static AltaPista newField = new AltaPista();
     
     
     public static void conectar()throws SQLException{
@@ -24,4 +26,6 @@ public class Controlador {
                 JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+e.getMessage());
         }
     }
+    
+    
 }
