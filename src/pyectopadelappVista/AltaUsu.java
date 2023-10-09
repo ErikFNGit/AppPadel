@@ -114,10 +114,10 @@ public class AltaUsu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AltaButton;
-    private javax.swing.JTextField AltaUsuDNI;
-    private javax.swing.JTextField AltaUsuMail;
-    private javax.swing.JTextField AltaUsuName;
-    private javax.swing.JTextField AltaUsuSurname;
+    public javax.swing.JTextField AltaUsuDNI;
+    public javax.swing.JTextField AltaUsuMail;
+    public javax.swing.JTextField AltaUsuName;
+    public javax.swing.JTextField AltaUsuSurname;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

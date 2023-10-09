@@ -123,8 +123,8 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField LogInDNI;
-    private javax.swing.JPasswordField LogInPass;
+    public javax.swing.JTextField LogInDNI;
+    public javax.swing.JPasswordField LogInPass;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

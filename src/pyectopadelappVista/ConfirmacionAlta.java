@@ -135,6 +135,6 @@ public class ConfirmacionAlta extends javax.swing.JFrame {
     private javax.swing.JButton BackButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField uCode;
+    public javax.swing.JTextField uCode;
     // End of variables declaration//GEN-END:variables
 }

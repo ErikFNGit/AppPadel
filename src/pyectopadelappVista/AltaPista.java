@@ -109,7 +109,7 @@ public class AltaPista extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField IDNuevaPista;
+    public javax.swing.JTextField IDNuevaPista;
     private javax.swing.JButton NuevaPistaButton;
     private javax.swing.JCheckBox NuevaPistaNotReady;
     private javax.swing.JCheckBox NuevaPistaReady;

@@ -205,10 +205,10 @@ public class EditUsu extends javax.swing.JFrame {
     private javax.swing.JCheckBox AmonestadoCheck;
     private javax.swing.JCheckBox CorrectoCheck;
     private javax.swing.JButton EditButton;
-    private javax.swing.JTextField EditUsuDNI;
-    private javax.swing.JTextField EditUsuMail;
-    private javax.swing.JTextField EditUsuName;
-    private javax.swing.JTextField EditUsuSurname;
+    public javax.swing.JTextField EditUsuDNI;
+    public javax.swing.JTextField EditUsuMail;
+    public javax.swing.JTextField EditUsuName;
+    public javax.swing.JTextField EditUsuSurname;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
