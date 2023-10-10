@@ -85,7 +85,7 @@ public class ConfirmacionAlta extends javax.swing.JFrame {
 
     private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButtonActionPerformed
         try {
-            Controlador.volverConfirmarUser();
+            Controlador.volverYLimpiarButton(Controlador.confirmAlta);
         } catch (SQLException ex) {
             Logger.getLogger(ConfirmacionAlta.class.getName()).log(Level.SEVERE, null, ex);
         }

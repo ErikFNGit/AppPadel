@@ -1,10 +1,12 @@
 package pyectopadelappControlador;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import pyectopadelappModelo.Pistas;
 import pyectopadelappModelo.Users;
 import pyectopadelappVista.AltaUsu;
@@ -30,7 +32,7 @@ public class Controlador {
     public static AdminPrincipal adminIndex = new AdminPrincipal();
     public static ConfirmacionAlta confirmAlta = new ConfirmacionAlta();
     public static EditPista editField = new EditPista();
-    public static EditUsu editUsu = new EditUsu();
+    public static EditUsu edUsu = new EditUsu();
     public static ErrorAltaUsuario errorNewUsu = new ErrorAltaUsuario();
     public static Login login = new Login();
     public static MenuUsuario menuUsu = new MenuUsuario();
@@ -61,9 +63,9 @@ public class Controlador {
     //Abrir edicion usuario
     public static void editarUsu(){
         adminIndex.setVisible(false);
-        editUsu.setVisible(true);
-        editUsu.setTitle("Editar usuario");
-        editUsu.setLocationRelativeTo(null);
+        edUsu.setVisible(true);
+        edUsu.setTitle("Editar usuario");
+        edUsu.setLocationRelativeTo(null);
     }
     //Abrir creacion de pista
     public static void addField(){
@@ -176,11 +178,28 @@ public class Controlador {
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
         }
     }
-    //Volver al inicio
-    public static void volverConfirmarUser() throws SQLException{
-        confirmAlta.uCode.setText("");
+        //Limpiar todos los campos
+    public static void lmpiarTextFields(Container container){
+        Component[] components = container.getComponents();
+        for (Component component : components){
+            if (component instanceof JTextField){
+                ((JTextField)component).setText("");
+            }else if(component instanceof JTextArea){
+                ((JTextArea)component).setText("");
+            }else if(component instanceof JComboBox){
+                ((JComboBox<?>)component).setSelectedIndex(0);
+            }else if(component instanceof JCheckBox){
+                ((JCheckBox)component).setSelected(false);
+            }else if(component instanceof Container){
+                lmpiarTextFields((Container)component);
+            }
+        }
+    }
+//Volver al inicio
+    public static void volverYLimpiarButton(JFrame currentFrame) throws SQLException{
+        lmpiarTextFields(currentFrame.getContentPane());
+        currentFrame.dispose();
         adminIndex.setTitle("Centro de administracion");
-        confirmAlta.setVisible(false);
         adminIndex.setVisible(true);
     }
     //Crear pista

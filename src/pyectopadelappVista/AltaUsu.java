@@ -27,6 +27,7 @@ public class AltaUsu extends javax.swing.JFrame {
         AltaUsuMail = new javax.swing.JTextField();
         AltaButton = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        altraAtras = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,6 +61,13 @@ public class AltaUsu extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel5.setText("Registro de usuarios");
 
+        altraAtras.setText("Atras");
+        altraAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                altraAtrasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -70,7 +78,7 @@ public class AltaUsu extends javax.swing.JFrame {
                 .addGap(80, 80, 80))
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -85,7 +93,9 @@ public class AltaUsu extends javax.swing.JFrame {
                             .addComponent(AltaUsuDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(114, 114, 114)
-                        .addComponent(AltaButton)))
+                        .addComponent(AltaButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(altraAtras)))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -110,7 +120,9 @@ public class AltaUsu extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(AltaUsuMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(AltaButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(AltaButton)
+                    .addComponent(altraAtras))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -133,12 +145,21 @@ public class AltaUsu extends javax.swing.JFrame {
         
     }//GEN-LAST:event_AltaUsuDNIActionPerformed
 
+    private void altraAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_altraAtrasActionPerformed
+        try {
+            Controlador.volverYLimpiarButton(Controlador.newUsu);
+        } catch (SQLException ex) {
+            Logger.getLogger(AltaUsu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_altraAtrasActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AltaButton;
     public javax.swing.JTextField AltaUsuDNI;
     public javax.swing.JTextField AltaUsuMail;
     public javax.swing.JTextField AltaUsuName;
     public javax.swing.JTextField AltaUsuSurname;
+    private javax.swing.JButton altraAtras;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
