@@ -185,7 +185,24 @@ public class Controlador {
     }
     //Crear pista
     public static void createField()throws SQLException{
-        field.setCodPista(Integer.parseInt(newField.IDNuevaPista.getText()));
-        
+        try{
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+            field.setCodPista(Integer.parseInt(newField.IDNuevaPista.getText()));
+            if (newField.NuevaPistaReady.isSelected()){
+                String query = "INSERT INTO fields (field_code, status) VALUES (?,?)";
+                PreparedStatement consulta = con.prepareStatement(query);
+                consulta.setInt(1, field.getCodPista());
+                consulta.setInt(2, 1 );
+            }else{
+                String query = "INSERT INTO fields (field_code, status) VALUES (?,?)";
+                PreparedStatement consulta = con.prepareStatement(query);
+                consulta.setInt(1, field.getCodPista());
+                consulta.setInt(2, 0 );
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
+            errorNewUsu.setTitle("ERROR");
+            Controlador.errorCreateUser();
+        }
     }
 }

@@ -8,13 +8,9 @@ import pyectopadelappModelo.Pistas;
 import pyectopadelappModelo.Users;
 
 public class AltaPista extends javax.swing.JFrame {
-
-
     public AltaPista() {
         initComponents();
     }
-
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -102,18 +98,21 @@ public class AltaPista extends javax.swing.JFrame {
     }//GEN-LAST:event_NuevaPistaReadyActionPerformed
 
     private void NuevaPistaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaPistaButtonActionPerformed
-        
+        try {
+            Controlador.createField();
+        } catch (SQLException ex) {
+            Logger.getLogger(AltaPista.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_NuevaPistaButtonActionPerformed
 
     private void IDNuevaPistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDNuevaPistaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_IDNuevaPistaActionPerformed
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTextField IDNuevaPista;
     private javax.swing.JButton NuevaPistaButton;
-    private javax.swing.JCheckBox NuevaPistaReady;
+    public javax.swing.JCheckBox NuevaPistaReady;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
