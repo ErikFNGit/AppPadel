@@ -37,6 +37,9 @@ public class AdminPrincipal extends javax.swing.JFrame {
         });
 
         AltaUsuButton.setText("Alta Usuario");
+        AltaUsuButton.setMaximumSize(new java.awt.Dimension(108, 23));
+        AltaUsuButton.setMinimumSize(new java.awt.Dimension(108, 23));
+        AltaUsuButton.setPreferredSize(new java.awt.Dimension(108, 23));
         AltaUsuButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AltaUsuButtonActionPerformed(evt);
@@ -44,6 +47,9 @@ public class AdminPrincipal extends javax.swing.JFrame {
         });
 
         AltaPistaButton.setText("Alta Pista");
+        AltaPistaButton.setMaximumSize(new java.awt.Dimension(108, 23));
+        AltaPistaButton.setMinimumSize(new java.awt.Dimension(108, 23));
+        AltaPistaButton.setPreferredSize(new java.awt.Dimension(108, 23));
         AltaPistaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AltaPistaButtonActionPerformed(evt);
@@ -51,6 +57,9 @@ public class AdminPrincipal extends javax.swing.JFrame {
         });
 
         EditPistaButton.setText("Editar Pistas");
+        EditPistaButton.setMaximumSize(new java.awt.Dimension(108, 23));
+        EditPistaButton.setMinimumSize(new java.awt.Dimension(108, 23));
+        EditPistaButton.setPreferredSize(new java.awt.Dimension(108, 23));
         EditPistaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EditPistaButtonActionPerformed(evt);
@@ -81,13 +90,13 @@ public class AdminPrincipal extends javax.swing.JFrame {
                 .addGap(42, 42, 42)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(AltaUsuButton)
+                .addComponent(AltaUsuButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(EditUsuButton)
                 .addGap(18, 18, 18)
-                .addComponent(AltaPistaButton)
+                .addComponent(AltaPistaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(EditPistaButton)
+                .addComponent(EditPistaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 

@@ -101,10 +101,11 @@ public class Controlador {
         newUsu.AltaUsuMail.setText("");
     }
     //Inicio de de sesion y comprobacion de rol
-    public static void login()throws SQLException{
+    public static void login()throws SQLException, ClassNotFoundException{
         String dniLogin = login.LogInDNI.getText();
         String codigoLogin = login.LogInPass.getText();
         try{
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
             String query = "SELECT status, isAdmin FROM users where dni='"+dniLogin+"'AND userCode='"+codigoLogin+"';";
             Statement state= con.createStatement();
@@ -147,13 +148,14 @@ public class Controlador {
             consulta.setString(2, usu.getUserName());
             consulta.setString(3, usu.getUserSurname());
             consulta.setString(4, usu.getUserMail());
-            consulta.setInt(5, usu.getUserStatus());
+            consulta.setInt(5, 1);
             
             int addedRows = consulta.executeUpdate();
             System.out.println("Añadidas correctamente: "+addedRows);
             //Aqui hay que añadir para que inicie el controlador, para que resetee
             //los values y se esconda la ventana y salga la de confirmacion de alta
             String dniBuscar = newUsu.AltaUsuDNI.getText();
+            System.out.println(dniBuscar);
             Controlador.generatedUserCod(dniBuscar);
             Controlador.resetValuesAddUser();
            
@@ -170,12 +172,17 @@ public class Controlador {
         try{
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
             String query="SELECT userCode FROM users WHERE dni='"+dniBuscar+"';";
+            System.out.println(dniBuscar);
             Statement state = con.createStatement();
             ResultSet result = state.executeQuery(query);
-            int codigoUser = result.getInt("userCode");
-            confirmAlta.uCode.setText(""+codigoUser);
+            if (result.next()){
+                int codigoUser = result.getInt("userCode");
+                confirmAlta.uCode.setText(""+codigoUser);
+            }else{
+                System.out.println("No se ha encontrado registros para el dni: " + dniBuscar);
+            }
         }catch(Exception ex){
-            JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
+            JOptionPane.showMessageDialog(null,"No se ha podido mostrar el codigo en la conexion a la base de datos"+ex.getMessage());
         }
     }
         //Limpiar todos los campos
