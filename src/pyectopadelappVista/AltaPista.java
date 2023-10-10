@@ -1,5 +1,12 @@
 package pyectopadelappVista;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import pyectopadelappControlador.Controlador;
+import pyectopadelappModelo.Pistas;
+import pyectopadelappModelo.Users;
+
 public class AltaPista extends javax.swing.JFrame {
 
 
@@ -17,7 +24,6 @@ public class AltaPista extends javax.swing.JFrame {
         IDNuevaPista = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         NuevaPistaReady = new javax.swing.JCheckBox();
-        NuevaPistaNotReady = new javax.swing.JCheckBox();
         NuevaPistaButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -27,19 +33,18 @@ public class AltaPista extends javax.swing.JFrame {
 
         jLabel1.setText("ID de pista:");
 
+        IDNuevaPista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IDNuevaPistaActionPerformed(evt);
+            }
+        });
+
         jLabel2.setText("Estado:");
 
         NuevaPistaReady.setText("Lista");
         NuevaPistaReady.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NuevaPistaReadyActionPerformed(evt);
-            }
-        });
-
-        NuevaPistaNotReady.setText("En mantenimiento");
-        NuevaPistaNotReady.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NuevaPistaNotReadyActionPerformed(evt);
             }
         });
 
@@ -61,7 +66,6 @@ public class AltaPista extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(NuevaPistaNotReady)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(IDNuevaPista))
@@ -85,9 +89,7 @@ public class AltaPista extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(NuevaPistaReady))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(NuevaPistaNotReady)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addComponent(NuevaPistaButton)
                 .addGap(21, 21, 21))
         );
@@ -99,19 +101,18 @@ public class AltaPista extends javax.swing.JFrame {
 
     }//GEN-LAST:event_NuevaPistaReadyActionPerformed
 
-    private void NuevaPistaNotReadyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaPistaNotReadyActionPerformed
-
-    }//GEN-LAST:event_NuevaPistaNotReadyActionPerformed
-
     private void NuevaPistaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaPistaButtonActionPerformed
-
+        
     }//GEN-LAST:event_NuevaPistaButtonActionPerformed
+
+    private void IDNuevaPistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDNuevaPistaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_IDNuevaPistaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTextField IDNuevaPista;
     private javax.swing.JButton NuevaPistaButton;
-    private javax.swing.JCheckBox NuevaPistaNotReady;
     private javax.swing.JCheckBox NuevaPistaReady;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

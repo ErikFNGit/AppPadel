@@ -1,5 +1,12 @@
 package pyectopadelappVista;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import pyectopadelappControlador.Controlador;
+import pyectopadelappModelo.Pistas;
+import pyectopadelappModelo.Users;
+
 public class AltaUsu extends javax.swing.JFrame {
 
     public AltaUsu() {
@@ -30,6 +37,12 @@ public class AltaUsu extends javax.swing.JFrame {
         jLabel3.setText("Apellido:");
 
         jLabel4.setText("Correo:");
+
+        AltaUsuDNI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AltaUsuDNIActionPerformed(evt);
+            }
+        });
 
         AltaUsuName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,8 +122,16 @@ public class AltaUsu extends javax.swing.JFrame {
     }//GEN-LAST:event_AltaUsuNameActionPerformed
 
     private void AltaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AltaButtonActionPerformed
-
+        try {
+            Controlador.createUser();
+        } catch (SQLException ex) {
+            Logger.getLogger(AltaUsu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_AltaButtonActionPerformed
+
+    private void AltaUsuDNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AltaUsuDNIActionPerformed
+        
+    }//GEN-LAST:event_AltaUsuDNIActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AltaButton;

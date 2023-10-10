@@ -47,6 +47,7 @@ public class Controlador {
     //Menu Principal del Admin
     public static void adminMenu(){
         login.setVisible(false);
+        adminIndex.setTitle("Centro de administracion");
         adminIndex.setVisible(true);
         adminIndex.setLocationRelativeTo(null);
     }
@@ -54,7 +55,29 @@ public class Controlador {
     public static void addUsu(){
         adminIndex.setVisible(false);
         newUsu.setVisible(true);
+        newUsu.setTitle("Nuevo usuario");
         newUsu.setLocationRelativeTo(null);
+    }
+    //Abrir edicion usuario
+    public static void editarUsu(){
+        adminIndex.setVisible(false);
+        editUsu.setVisible(true);
+        editUsu.setTitle("Editar usuario");
+        editUsu.setLocationRelativeTo(null);
+    }
+    //Abrir creacion de pista
+    public static void addField(){
+        adminIndex.setVisible(false);
+        newField.setVisible(true);
+        newField.setTitle("Añadir pista");
+        newField.setLocationRelativeTo(null);
+    }
+    //Abrir edicion de pista
+    public static void editarField(){
+        adminIndex.setVisible(false);
+        editField.setVisible(true);
+        editField.setTitle("Editar pista");
+        editField.setLocationRelativeTo(null);
     }
     //Ventana error usuario
     public static void errorCreateUser(){
@@ -89,11 +112,15 @@ public class Controlador {
                     if(result.getInt("isAdmin")==1){
                         adminIndex.setTitle("Centro de administracion");
                         login.setVisible(false);
-                        adminIndex.setVisible(true);                    
+                        adminIndex.setVisible(true);
+                        login.LogInDNI.setText("");
+                        login.LogInPass.setText("");
                     }else{
                         menuUsu.setTitle("Menu Principal");
                         login.setVisible(false);
                         menuUsu.setVisible(true);
+                        login.LogInDNI.setText("");
+                        login.LogInPass.setText("");
                     }
                 }
             }else{
@@ -105,7 +132,6 @@ public class Controlador {
     }
     // funcion para registrar nuevos usuarios
     public static void createUser() throws SQLException{
-        newUsu.setTitle("Nuevo usuario");
         usu.setUserDNI(newUsu.AltaUsuDNI.getText());
         usu.setUserName(newUsu.AltaUsuName.getText());
         usu.setUserSurname(newUsu.AltaUsuSurname.getText());
@@ -150,5 +176,16 @@ public class Controlador {
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
         }
     }
-    
+    //Volver al inicio
+    public static void volverConfirmarUser() throws SQLException{
+        confirmAlta.uCode.setText("");
+        adminIndex.setTitle("Centro de administracion");
+        confirmAlta.setVisible(false);
+        adminIndex.setVisible(true);
+    }
+    //Crear pista
+    public static void createField()throws SQLException{
+        field.setCodPista(Integer.parseInt(newField.IDNuevaPista.getText()));
+        
+    }
 }

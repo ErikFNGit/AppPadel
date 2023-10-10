@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import pyectopadelappControlador.Controlador;
 import pyectopadelappModelo.Pistas;
 import pyectopadelappModelo.Users;
-import pyectopadelappModelo.Admin;
 
 public class Login extends javax.swing.JFrame {
 
