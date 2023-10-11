@@ -18,6 +18,7 @@ public class EditUsu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroupEditar = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -35,7 +36,7 @@ public class EditUsu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("DNI:");
+        jLabel1.setText("Codigo:");
 
         jLabel2.setText("Nombre:");
 
@@ -180,13 +181,14 @@ public class EditUsu extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox AmonestadoCheck;
-    private javax.swing.JCheckBox CorrectoCheck;
+    public javax.swing.JCheckBox AmonestadoCheck;
+    public javax.swing.JCheckBox CorrectoCheck;
     private javax.swing.JButton EditButton;
     public javax.swing.JTextField EditUsuDNI;
     public javax.swing.JTextField EditUsuMail;
     public javax.swing.JTextField EditUsuName;
     public javax.swing.JTextField EditUsuSurname;
+    public javax.swing.ButtonGroup buttonGroupEditar;
     private javax.swing.JButton editAtras;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

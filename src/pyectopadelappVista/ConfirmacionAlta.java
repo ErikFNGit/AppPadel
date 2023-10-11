@@ -80,7 +80,7 @@ public class ConfirmacionAlta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void uCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uCodeActionPerformed
-
+        uCode.setEditable(false);
     }//GEN-LAST:event_uCodeActionPerformed
 
     private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButtonActionPerformed

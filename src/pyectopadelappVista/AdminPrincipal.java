@@ -104,11 +104,11 @@ public class AdminPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void EditUsuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditUsuButtonActionPerformed
-        Controlador.addUsu();
+        Controlador.listUsers();
     }//GEN-LAST:event_EditUsuButtonActionPerformed
 
     private void AltaUsuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AltaUsuButtonActionPerformed
-        Controlador.editarUsu();
+        Controlador.addUsu();
     }//GEN-LAST:event_AltaUsuButtonActionPerformed
 
     private void AltaPistaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AltaPistaButtonActionPerformed

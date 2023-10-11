@@ -116,7 +116,11 @@ public class AltaPista extends javax.swing.JFrame {
     }//GEN-LAST:event_NuevaPistaButtonActionPerformed
 
     private void IDNuevaPistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDNuevaPistaActionPerformed
-        // TODO add your handling code here:
+        try {
+            Controlador.createField();
+        } catch (SQLException ex) {
+            Logger.getLogger(AltaPista.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_IDNuevaPistaActionPerformed
 
     private void pistaCrAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pistaCrAtrasActionPerformed
