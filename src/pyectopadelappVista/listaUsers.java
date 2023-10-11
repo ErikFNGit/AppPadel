@@ -1,4 +1,10 @@
 package pyectopadelappVista;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import pyectopadelappControlador.Controlador;
+import pyectopadelappModelo.Pistas;
+import pyectopadelappModelo.Users;
 
 public class listaUsers extends javax.swing.JFrame {
 
@@ -69,7 +75,7 @@ public class listaUsers extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buscarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarUsuarioActionPerformed
-        // TODO add your handling code here:
+        Controlador.cargarDatosEditar();
     }//GEN-LAST:event_buscarUsuarioActionPerformed
 
 

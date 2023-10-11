@@ -275,7 +275,6 @@ public class Controlador {
     //Buscar el usuario a editar
     public static void cargarDatosEditar(){
         Controlador.editarUsu();
-        listUsu.searchUsers.setText("");
         try{
             edUsu.buttonGroupEditar.add(edUsu.AmonestadoCheck);
             edUsu.buttonGroupEditar.add(edUsu.CorrectoCheck);
@@ -295,11 +294,11 @@ public class Controlador {
                 edUsu.EditUsuSurname.setText(surname);  
                 edUsu.EditUsuMail.setText(mail); 
                 if (status == 1){
-                    edUsu.AmonestadoCheck.setSelected(true);
-                    edUsu.CorrectoCheck.setSelected(false);
-                }else if (status == 0){
                     edUsu.AmonestadoCheck.setSelected(false);
                     edUsu.CorrectoCheck.setSelected(true);
+                }else if (status == 0){
+                    edUsu.AmonestadoCheck.setSelected(true);
+                    edUsu.CorrectoCheck.setSelected(false);
                 }
 
             }
@@ -312,7 +311,7 @@ public class Controlador {
     public static void guardarEdicionUsu(){
         usu.setUserCode(Integer.parseInt(edUsu.EditUsuDNI.getText()));
         usu.setUserName(edUsu.EditUsuName.getText());
-        usu.setUserSurname(edUsu.EditUsuName.getText());
+        usu.setUserSurname(edUsu.EditUsuSurname.getText());
         usu.setUserMail(edUsu.EditUsuMail.getText());
         if (edUsu.AmonestadoCheck.isSelected()){
             usu.setUserStatus(0);

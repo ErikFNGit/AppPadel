@@ -44,6 +44,12 @@ public class EditUsu extends javax.swing.JFrame {
 
         jLabel4.setText("Correo:");
 
+        EditUsuDNI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditUsuDNIActionPerformed(evt);
+            }
+        });
+
         EditUsuName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EditUsuNameActionPerformed(evt);
@@ -159,7 +165,7 @@ public class EditUsu extends javax.swing.JFrame {
     }//GEN-LAST:event_EditUsuNameActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
-        // TODO add your handling code here:
+       Controlador.guardarEdicionUsu();
     }//GEN-LAST:event_EditButtonActionPerformed
 
     private void AmonestadoCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AmonestadoCheckActionPerformed
@@ -177,6 +183,10 @@ public class EditUsu extends javax.swing.JFrame {
             Logger.getLogger(EditUsu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_editAtrasActionPerformed
+
+    private void EditUsuDNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditUsuDNIActionPerformed
+        EditUsuDNI.setEditable(false);
+    }//GEN-LAST:event_EditUsuDNIActionPerformed
 
 
 
