@@ -15,15 +15,13 @@ import pyectopadelappVista.AdminPrincipal;
 import pyectopadelappVista.ConfirmacionAlta;
 import pyectopadelappVista.EditPista;
 import pyectopadelappVista.EditUsu;
+import pyectopadelappVista.EditUsuPubli;
 import pyectopadelappVista.ErrorAltaUsuario;
 import pyectopadelappVista.Login;
 import pyectopadelappVista.MenuUsuario;
 import pyectopadelappVista.SeleccionPistaYMes;
 import pyectopadelappVista.PerfilUsuario;
 import pyectopadelappVista.listaUsers;
-
-
-
 
 public class Controlador {
     public static Pistas field = new Pistas();
@@ -34,12 +32,14 @@ public class Controlador {
     public static ConfirmacionAlta confirmAlta = new ConfirmacionAlta();
     public static EditPista editField = new EditPista();
     public static EditUsu edUsu = new EditUsu();
+    public static EditUsuPubli edUsuPubli = new EditUsuPubli();
     public static ErrorAltaUsuario errorNewUsu = new ErrorAltaUsuario();
     public static Login login = new Login();
     public static MenuUsuario menuUsu = new MenuUsuario();
     public static SeleccionPistaYMes selectFieldMonth = new SeleccionPistaYMes();
     public static PerfilUsuario profileUsu = new PerfilUsuario();
     public static listaUsers listUsu = new listaUsers();
+    
     
     
     //Funcion para iniciar el programa
@@ -70,6 +70,13 @@ public class Controlador {
         listUsu.setLocationRelativeTo(null);
     }
     //Abrir edicion usuario
+    public static void editarUsuPubli(){
+        profileUsu.setVisible(false);
+        edUsuPubli.setVisible(true);
+        edUsuPubli.setTitle("Editar datos");
+        edUsuPubli.setLocationRelativeTo(null);
+    }
+    //Abrir edicion usuario desde la parte de usuario
     public static void editarUsu(){
         listUsu.setVisible(false);
         edUsu.setVisible(true);
@@ -89,6 +96,13 @@ public class Controlador {
         editField.setVisible(true);
         editField.setTitle("Editar pista");
         editField.setLocationRelativeTo(null);
+    }
+    //Perfil de usuario
+    public static void abrirPerfilUsu(){
+        menuUsu.setVisible(false);
+        profileUsu.setVisible(true);
+        profileUsu.setTitle("Mi perfil");
+        profileUsu.setLocationRelativeTo(null);
     }
     //Ventana error usuario
     public static void errorCreateUser(){
@@ -121,13 +135,16 @@ public class Controlador {
             ResultSet result = state.executeQuery(query);
             if(result.next()){
                 if (result.getInt("status")==1){
+                    usu.setUserCode(Integer.parseInt(codigoLogin));
                     if(result.getInt("isAdmin")==1){
+                        usu.setIsAdmin(1);
                         adminIndex.setTitle("Centro de administracion");
                         login.setVisible(false);
                         adminIndex.setVisible(true);
                         login.LogInDNI.setText("");
                         login.LogInPass.setText("");
                     }else{
+                        usu.setIsAdmin(0);
                         menuUsu.setTitle("Menu Principal");
                         login.setVisible(false);
                         menuUsu.setVisible(true);
@@ -215,8 +232,13 @@ public class Controlador {
     public static void volverYLimpiarButton(JFrame currentFrame) throws SQLException{
         lmpiarTextFields(currentFrame.getContentPane());
         currentFrame.dispose();
-        adminIndex.setTitle("Centro de administracion");
-        adminIndex.setVisible(true);
+        if (usu.getIsAdmin()==1){
+            adminIndex.setTitle("Centro de administracion");
+            adminIndex.setVisible(true);
+        }else if (usu.getIsAdmin()==0){
+            menuUsu.setTitle("Menu principal");
+            menuUsu.setVisible(true);
+        }
     }
     //Crear pista
     public static void createField()throws SQLException{
@@ -308,6 +330,7 @@ public class Controlador {
             Controlador.errorCreateUser();
         }
     }
+    //Guardar los datos editados en la edicion
     public static void guardarEdicionUsu(){
         usu.setUserCode(Integer.parseInt(edUsu.EditUsuDNI.getText()));
         usu.setUserName(edUsu.EditUsuName.getText());
@@ -326,6 +349,67 @@ public class Controlador {
             consulta.setString(2,usu.getUserSurname());
             consulta.setString(3,usu.getUserMail());
             consulta.setInt(4,usu.getUserStatus());
+            int insertedRows=consulta.executeUpdate();
+            System.out.println("Actualizaciones: "+insertedRows);
+            Controlador.volverYLimpiarButton(edUsu);
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
+            errorNewUsu.setTitle("ERROR");
+            Controlador.errorCreateUser();
+        }
+    }
+    //Cargar los datos personales en el perfil del usuario
+    public static void cargarDatosPerfilUsuario(){
+        Controlador.abrirPerfilUsu();
+        try{
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+            String query= "SELECT dni, name, surname, mail FROM users WHERE userCode='"+usu.getUserCode()+"';";
+            PreparedStatement consulta = con.prepareStatement(query);
+            ResultSet result = consulta.executeQuery();
+            if(result.next()){
+                String dni = result.getString("dni");
+                String name = result.getString("name");
+                String surname = result.getString("surname");
+                String mail = result.getString("mail");
+                profileUsu.perilUsuarioName.setText(name);
+                usu.setUserName(name);
+                profileUsu.perfilUsuarioSurname.setText(surname);
+                usu.setUserSurname(surname);
+                profileUsu.perfilUsuarioDni.setText(dni);
+                usu.setUserDNI(dni);
+                profileUsu.perfilUsuarioCorreo.setText(mail);
+                usu.setUserMail(mail);
+                
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos "+ex.getMessage());
+            errorNewUsu.setTitle("ERROR");
+            Controlador.errorCreateUser();
+        }
+    }
+    //abrir y cargar datos del usuario
+    public static void abrirYCargarDatos(){
+        Controlador.editarUsuPubli();
+        edUsuPubli.EditUsuName.setText(usu.getUserName());
+        edUsuPubli.EditUsuSurname.setText(usu.getUserSurname());
+        edUsuPubli.EditUsuDNI.setText(usu.getUserDNI());
+        edUsuPubli.EditUsuMail.setText(usu.getUserMail());
+    }
+    //Guardar los datos de la edicion
+    public static void guardarEdicionUsuPubli(){
+        
+        usu.setUserDNI(edUsuPubli.EditUsuDNI.getText());
+        usu.setUserName(edUsuPubli.EditUsuName.getText());
+        usu.setUserSurname(edUsuPubli.EditUsuSurname.getText());
+        usu.setUserMail(edUsuPubli.EditUsuMail.getText());
+        try{
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+            String query= "UPDATE users SET dni=?, name=?, surname=?, mail=? WHERE userCode='"+usu.getUserCode()+"';";
+            PreparedStatement consulta = con.prepareStatement(query);
+            consulta.setString(1,usu.getUserDNI());
+            consulta.setString(2,usu.getUserName());
+            consulta.setString(3,usu.getUserSurname());
+            consulta.setString(4,usu.getUserMail());
             int insertedRows=consulta.executeUpdate();
             System.out.println("Actualizaciones: "+insertedRows);
             Controlador.volverYLimpiarButton(edUsu);

@@ -11,6 +11,7 @@ public class Users {
     private String userSurname;
     private String userMail;
     private int userStatus;
+    private int isAdmin;
 
     public String getUserDNI() {
         return userDNI;
@@ -53,6 +54,14 @@ public class Users {
     public void setUserStatus(int userStatus) {
         this.userStatus = userStatus;
     }
+
+    public int getIsAdmin() {
+        return isAdmin;
+    }
+    public void setIsAdmin(int isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+    
     
     
 }
