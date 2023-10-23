@@ -7,10 +7,10 @@ import pyectopadelappControlador.Controlador;
 import pyectopadelappModelo.Pistas;
 import pyectopadelappModelo.Users;
 
-public class ErrorAltaUsuario extends javax.swing.JFrame {
+public class ErrorAltaPistas extends javax.swing.JFrame {
 
 
-    public ErrorAltaUsuario() {
+    public ErrorAltaPistas() {
         initComponents();
     }
     @SuppressWarnings("unchecked")
@@ -24,10 +24,10 @@ public class ErrorAltaUsuario extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("con este DNI o Mail");
+        jLabel1.setText("con este codigo");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel2.setText("Error, ya existe un usuario");
+        jLabel2.setText("Error, ya existe una pista");
 
         BackButton.setText("Atras");
         BackButton.addActionListener(new java.awt.event.ActionListener() {
@@ -46,12 +46,12 @@ public class ErrorAltaUsuario extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(129, 129, 129)
-                        .addComponent(BackButton)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                        .addComponent(BackButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(73, 73, 73)
+                        .addComponent(jLabel1)))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -69,7 +69,7 @@ public class ErrorAltaUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButtonActionPerformed
-        Controlador.closeErrorAddUsu();
+        Controlador.closeErrorAddField();
     }//GEN-LAST:event_BackButtonActionPerformed
 
 

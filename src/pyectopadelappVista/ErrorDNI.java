@@ -7,10 +7,10 @@ import pyectopadelappControlador.Controlador;
 import pyectopadelappModelo.Pistas;
 import pyectopadelappModelo.Users;
 
-public class ErrorAltaUsuario extends javax.swing.JFrame {
+public class ErrorDNI extends javax.swing.JFrame {
 
 
-    public ErrorAltaUsuario() {
+    public ErrorDNI() {
         initComponents();
     }
     @SuppressWarnings("unchecked")
@@ -24,10 +24,10 @@ public class ErrorAltaUsuario extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("con este DNI o Mail");
+        jLabel1.setText("es correcto");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel2.setText("Error, ya existe un usuario");
+        jLabel2.setText("Error, el DNI recibido no");
 
         BackButton.setText("Atras");
         BackButton.addActionListener(new java.awt.event.ActionListener() {
@@ -46,21 +46,21 @@ public class ErrorAltaUsuario extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(129, 129, 129)
-                        .addComponent(BackButton)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                        .addComponent(BackButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(101, 101, 101)
+                        .addComponent(jLabel1)))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(BackButton)
                 .addGap(23, 23, 23))
         );
@@ -69,7 +69,7 @@ public class ErrorAltaUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButtonActionPerformed
-        Controlador.closeErrorAddUsu();
+        Controlador.closeErrorDNI();
     }//GEN-LAST:event_BackButtonActionPerformed
 
 

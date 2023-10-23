@@ -22,6 +22,8 @@ import pyectopadelappVista.MenuUsuario;
 import pyectopadelappVista.SeleccionPistaYMes;
 import pyectopadelappVista.PerfilUsuario;
 import pyectopadelappVista.listaUsers;
+import pyectopadelappVista.ErrorAltaPistas;
+import pyectopadelappVista.ErrorDNI;
 
 public class Controlador {
     public static Pistas field = new Pistas();
@@ -39,14 +41,42 @@ public class Controlador {
     public static SeleccionPistaYMes selectFieldMonth = new SeleccionPistaYMes();
     public static PerfilUsuario profileUsu = new PerfilUsuario();
     public static listaUsers listUsu = new listaUsers();
-    
-    
+    public static ErrorAltaPistas errorNewField = new ErrorAltaPistas();
+    public static ErrorDNI wrongDNI = new ErrorDNI();
     
     //Funcion para iniciar el programa
     public static void start(){
         login.setTitle("Login");
         login.setVisible(true);
         login.setLocationRelativeTo(null);
+    }
+    //Ventana error usuario
+    public static void errorCreateUser(){
+        newUsu.setVisible(false);
+        errorNewUsu.setTitle("ERROR");
+        errorNewUsu.setVisible(true);
+        errorNewUsu.setLocationRelativeTo(null);
+    }
+    //Cerrar ventana error
+    public static void closeErrorAddUsu(){
+        errorNewUsu.setVisible(false);
+        newUsu.setVisible(true);
+        newUsu.setTitle("Nuevo usuario");
+        newUsu.setLocationRelativeTo(null);
+    }
+    //Ventana error pista
+    public static void errorAddField(){
+        newField.setVisible(false);
+        errorNewField.setTitle("ERROR");
+        errorNewField.setVisible(true);
+        errorNewField.setLocationRelativeTo(null);
+    }
+    //Cerrar ventana error
+    public static void closeErrorAddField(){
+        errorNewField.setVisible(false);
+        newField.setVisible(true);
+        newField.setTitle("Nueva pista");
+        newField.setLocationRelativeTo(null);
     }
     //Menu Principal del Admin
     public static void adminMenu(){
@@ -104,12 +134,6 @@ public class Controlador {
         profileUsu.setTitle("Mi perfil");
         profileUsu.setLocationRelativeTo(null);
     }
-    //Ventana error usuario
-    public static void errorCreateUser(){
-        newUsu.setVisible(false);
-        errorNewUsu.setVisible(true);
-        errorNewUsu.setLocationRelativeTo(null);
-    }
     //Ventana confirmacion usuario y su codigo:
     public static void confirmationCreateUser(){
         newUsu.setVisible(false);
@@ -122,6 +146,20 @@ public class Controlador {
         newUsu.AltaUsuName.setText("");
         newUsu.AltaUsuSurname.setText("");
         newUsu.AltaUsuMail.setText("");
+    }
+    //Abrir ventana error
+    public static void DNIerroneo(){
+        newUsu.setVisible(false);
+        wrongDNI.setTitle("ERROR");
+        wrongDNI.setVisible(true);
+        wrongDNI.setLocationRelativeTo(null);
+    }
+    //Atras ventana error DNI
+    public static void closeErrorDNI(){
+        wrongDNI.setVisible(false);
+        newUsu.setVisible(true);
+        newUsu.setTitle("Nuevo usuario");
+        newUsu.setLocationRelativeTo(null);
     }
     //Inicio de de sesion y comprobacion de rol
     public static void login()throws SQLException, ClassNotFoundException{
@@ -159,6 +197,27 @@ public class Controlador {
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
         }
     }
+    //Funcion calcular numero dni
+    public static char calcLetraDni(int digitos){
+        String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+        int indice = digitos % 23;
+        return letras.charAt(indice);
+    }
+    //Funcion validacion de DNI
+    public static boolean validarDNI(String dni){
+        if (dni.length()!=9){
+            return false;
+        }
+        String digitos = dni.substring(0,8);
+        char letraVerificacion = dni.charAt(8);
+        char letaEsperada= calcLetraDni(Integer.parseInt(digitos));
+        if (letraVerificacion == letaEsperada){
+            return true;
+        }else{
+            return false;
+        }
+   
+    }
     // funcion para registrar nuevos usuarios
     public static void createUser() throws SQLException{
         usu.setUserDNI(newUsu.AltaUsuDNI.getText());
@@ -167,6 +226,7 @@ public class Controlador {
         usu.setUserMail(newUsu.AltaUsuMail.getText());
         usu.setUserStatus(1);
         try{
+            if (validarDNI(usu.getUserDNI())==true){
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
             String query= "INSERT INTO users (dni,name,surname,mail,status) VALUES (?,?,?,?,?)";
             PreparedStatement consulta = con.prepareStatement(query);
@@ -185,10 +245,12 @@ public class Controlador {
             confirmAlta.uCode.setHorizontalAlignment(JTextField.CENTER);
             Controlador.generatedUserCod(dniBuscar);
             Controlador.resetValuesAddUser();
+            }else{
+                
+            }
            
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
-            errorNewUsu.setTitle("ERROR");
             Controlador.errorCreateUser();
         }
     }
@@ -266,7 +328,7 @@ public class Controlador {
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
             errorNewUsu.setTitle("ERROR");
-            Controlador.errorCreateUser();
+            Controlador.errorAddField();
         }
     }
     //Lista de usuarios
