@@ -210,13 +210,43 @@ public class Controlador {
         }
         String digitos = dni.substring(0,8);
         char letraVerificacion = dni.charAt(8);
-        char letaEsperada= calcLetraDni(Integer.parseInt(digitos));
-        if (letraVerificacion == letaEsperada){
+        char letraEsperada= calcLetraDni(Integer.parseInt(digitos));
+        if (letraVerificacion == letraEsperada){
             return true;
         }else{
             return false;
         }
    
+    }
+    //Funcion calcular letra NIE
+    public static char calcLetraNIE(char letraInicial, int digitos){
+        String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+        int indice = digitos % 23;
+        
+        if (letraInicial == 'Y'){
+            indice += 10000000;
+        }else if (letraInicial == 'Z'){
+            indice += 20000000;
+        }
+        return letras.charAt(indice);
+    }
+    //Funcion validar NIE
+    public static boolean validarNIE(String nie){
+        if (nie.length() != 9){
+            return false;
+        }
+        char letraInicial = nie.charAt(0);
+        if (letraInicial != 'X' && letraInicial != 'Y' && letraInicial != 'Z'){
+            return false;
+        }
+        String digitos = nie.substring(1,8);
+        char letraVerificacion = nie.charAt(8);
+        char letraEsperada = calcLetraNIE(letraInicial, Integer.parseInt(digitos));
+        if (letraVerificacion == letraEsperada){
+            return true;
+        }else{
+            return false;
+        }
     }
     // funcion para registrar nuevos usuarios
     public static void createUser() throws SQLException{
@@ -226,29 +256,47 @@ public class Controlador {
         usu.setUserMail(newUsu.AltaUsuMail.getText());
         usu.setUserStatus(1);
         try{
-            if (validarDNI(usu.getUserDNI())==true){
-            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
-            String query= "INSERT INTO users (dni,name,surname,mail,status) VALUES (?,?,?,?,?)";
-            PreparedStatement consulta = con.prepareStatement(query);
-            consulta.setString(1, usu.getUserDNI());
-            consulta.setString(2, usu.getUserName());
-            consulta.setString(3, usu.getUserSurname());
-            consulta.setString(4, usu.getUserMail());
-            consulta.setInt(5, 1);
-            
-            int addedRows = consulta.executeUpdate();
-            System.out.println("Añadidas correctamente: "+addedRows);
-            //Aqui hay que añadir para que inicie el controlador, para que resetee
-            //los values y se esconda la ventana y salga la de confirmacion de alta
-            String dniBuscar = newUsu.AltaUsuDNI.getText();
-            System.out.println(dniBuscar);
-            confirmAlta.uCode.setHorizontalAlignment(JTextField.CENTER);
-            Controlador.generatedUserCod(dniBuscar);
-            Controlador.resetValuesAddUser();
+            if (validarDNI(usu.getUserDNI())== true){
+                Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+                String query= "INSERT INTO users (dni,name,surname,mail,status) VALUES (?,?,?,?,?)";
+                PreparedStatement consulta = con.prepareStatement(query);
+                consulta.setString(1, usu.getUserDNI());
+                consulta.setString(2, usu.getUserName());
+                consulta.setString(3, usu.getUserSurname());
+                consulta.setString(4, usu.getUserMail());
+                consulta.setInt(5, 1);
+                int addedRows = consulta.executeUpdate();
+                System.out.println("Añadidas correctamente: "+addedRows);
+                //Aqui hay que añadir para que inicie el controlador, para que resetee
+                //los values y se esconda la ventana y salga la de confirmacion de alta
+                String dniBuscar = newUsu.AltaUsuDNI.getText();
+                System.out.println(dniBuscar);
+                confirmAlta.uCode.setHorizontalAlignment(JTextField.CENTER);
+                Controlador.generatedUserCod(dniBuscar);
+                Controlador.resetValuesAddUser();
+            }else if(validarNIE(usu.getUserDNI())== true){
+                Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+                String query= "INSERT INTO users (dni,name,surname,mail,status) VALUES (?,?,?,?,?)";
+                PreparedStatement consulta = con.prepareStatement(query);
+                consulta.setString(1, usu.getUserDNI());
+                consulta.setString(2, usu.getUserName());
+                consulta.setString(3, usu.getUserSurname());
+                consulta.setString(4, usu.getUserMail());
+                consulta.setInt(5, 1);
+                int addedRows = consulta.executeUpdate();
+                System.out.println("Añadidas correctamente: "+addedRows);
+                //Aqui hay que añadir para que inicie el controlador, para que resetee
+                //los values y se esconda la ventana y salga la de confirmacion de alta
+                String dniBuscar = newUsu.AltaUsuDNI.getText();
+                System.out.println(dniBuscar);
+                confirmAlta.uCode.setHorizontalAlignment(JTextField.CENTER);
+                Controlador.generatedUserCod(dniBuscar);
+                Controlador.resetValuesAddUser(); 
             }else{
-                
+                newUsu.setVisible(false);
+                wrongDNI.setVisible(true);
+                wrongDNI.setTitle("ERROR");
             }
-           
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
             Controlador.errorCreateUser();
@@ -490,4 +538,5 @@ public class Controlador {
             Controlador.errorCreateUser();
         }
     }
+    
 }
