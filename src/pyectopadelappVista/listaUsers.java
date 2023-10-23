@@ -75,7 +75,11 @@ public class listaUsers extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buscarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarUsuarioActionPerformed
-        Controlador.cargarDatosEditar();
+        try {
+            Controlador.cargarDatosEditar();
+        } catch (SQLException ex) {
+            Logger.getLogger(listaUsers.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_buscarUsuarioActionPerformed
 
 

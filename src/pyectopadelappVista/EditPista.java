@@ -57,7 +57,12 @@ public class EditPista extends javax.swing.JFrame {
             }
         });
 
-        NuevaPistaButton1.setText("Crear");
+        NuevaPistaButton1.setText("Editar");
+        NuevaPistaButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NuevaPistaButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -135,6 +140,10 @@ public class EditPista extends javax.swing.JFrame {
             Logger.getLogger(EditPista.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_altaPistaAtrasActionPerformed
+
+    private void NuevaPistaButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaPistaButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NuevaPistaButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

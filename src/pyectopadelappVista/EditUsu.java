@@ -165,7 +165,11 @@ public class EditUsu extends javax.swing.JFrame {
     }//GEN-LAST:event_EditUsuNameActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
-       Controlador.guardarEdicionUsu();
+        try {
+            Controlador.guardarEdicionUsu();
+        } catch (SQLException ex) {
+            Logger.getLogger(EditUsu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_EditButtonActionPerformed
 
     private void AmonestadoCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AmonestadoCheckActionPerformed

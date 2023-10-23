@@ -147,8 +147,11 @@
     </Component>
     <Component class="javax.swing.JButton" name="NuevaPistaButton1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Crear"/>
+        <Property name="text" type="java.lang.String" value="Editar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NuevaPistaButton1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

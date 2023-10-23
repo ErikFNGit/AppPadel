@@ -88,34 +88,43 @@ public class PerfilUsuario extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(83, 83, 83)
+                            .addComponent(jLabel2))
                         .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
-                    .addComponent(editarPerfilUsuBoton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(editarPerfilUsuBoton)
-                        .addGap(18, 18, 18)
-                        .addComponent(editarReservarUsuBoton))
-                    .addComponent(perilUsuarioName)
-                    .addComponent(perfilUsuarioSurname)
-                    .addComponent(perfilUsuarioDni)
-                    .addComponent(perfilUsuarioCorreo, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(21, 21, 21))
+                        .addGap(19, 19, 19)
+                        .addComponent(editarPerfilUsuBoton1)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(perfilUsuarioCorreo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+                            .addComponent(perfilUsuarioDni, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(perfilUsuarioSurname, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(perilUsuarioName, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(69, 69, 69))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(editarPerfilUsuBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(editarReservarUsuBoton)
+                        .addContainerGap(36, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(149, 149, 149))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(14, 14, 14)
                 .addComponent(jLabel1)
-                .addGap(23, 23, 23)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -136,8 +145,8 @@ public class PerfilUsuario extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(editarReservarUsuBoton)
-                    .addComponent(editarPerfilUsuBoton)
-                    .addComponent(editarPerfilUsuBoton1))
+                    .addComponent(editarPerfilUsuBoton1)
+                    .addComponent(editarPerfilUsuBoton))
                 .addGap(14, 14, 14))
         );
 
@@ -157,7 +166,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_perfilUsuarioDniActionPerformed
 
     private void perilUsuarioNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_perilUsuarioNameActionPerformed
-        perilUsuarioName.setEditable(false);
+        perilUsuarioName.setEnabled(false);
     }//GEN-LAST:event_perilUsuarioNameActionPerformed
 
     private void perfilUsuarioCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_perfilUsuarioCorreoActionPerformed

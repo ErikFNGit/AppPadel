@@ -182,6 +182,7 @@ public class Controlador {
             //los values y se esconda la ventana y salga la de confirmacion de alta
             String dniBuscar = newUsu.AltaUsuDNI.getText();
             System.out.println(dniBuscar);
+            confirmAlta.uCode.setHorizontalAlignment(JTextField.CENTER);
             Controlador.generatedUserCod(dniBuscar);
             Controlador.resetValuesAddUser();
            
@@ -257,7 +258,7 @@ public class Controlador {
                 String query = "INSERT INTO fields (field_code, status) VALUES (?,?)";
                 PreparedStatement consulta = con.prepareStatement(query);
                 consulta.setInt(1, field.getCodPista());
-                consulta.setInt(2, 0 );
+            consulta.setInt(2, 0 );
                 int addedRows = consulta.executeUpdate();
                 System.out.println("Añadidas correctamente: "+addedRows);
                 Controlador.volverYLimpiarButton(newField);
@@ -295,7 +296,7 @@ public class Controlador {
         }
     }
     //Buscar el usuario a editar
-    public static void cargarDatosEditar(){
+    public static void cargarDatosEditar() throws SQLException{
         Controlador.editarUsu();
         try{
             edUsu.buttonGroupEditar.add(edUsu.AmonestadoCheck);
@@ -331,7 +332,7 @@ public class Controlador {
         }
     }
     //Guardar los datos editados en la edicion
-    public static void guardarEdicionUsu(){
+    public static void guardarEdicionUsu() throws SQLException{
         usu.setUserCode(Integer.parseInt(edUsu.EditUsuDNI.getText()));
         usu.setUserName(edUsu.EditUsuName.getText());
         usu.setUserSurname(edUsu.EditUsuSurname.getText());
@@ -372,12 +373,20 @@ public class Controlador {
                 String surname = result.getString("surname");
                 String mail = result.getString("mail");
                 profileUsu.perilUsuarioName.setText(name);
+                profileUsu.perilUsuarioName.setEditable(false);
+                profileUsu.perilUsuarioName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
                 usu.setUserName(name);
                 profileUsu.perfilUsuarioSurname.setText(surname);
+                profileUsu.perfilUsuarioSurname.setEditable(false);
+                profileUsu.perfilUsuarioSurname.setBorder(javax.swing.BorderFactory.createEmptyBorder());
                 usu.setUserSurname(surname);
                 profileUsu.perfilUsuarioDni.setText(dni);
+                profileUsu.perfilUsuarioDni.setEditable(false);
+                profileUsu.perfilUsuarioDni.setBorder(javax.swing.BorderFactory.createEmptyBorder());
                 usu.setUserDNI(dni);
                 profileUsu.perfilUsuarioCorreo.setText(mail);
+                profileUsu.perfilUsuarioCorreo.setEditable(false);
+                profileUsu.perfilUsuarioCorreo.setBorder(javax.swing.BorderFactory.createEmptyBorder());
                 usu.setUserMail(mail);
                 
             }
@@ -412,7 +421,7 @@ public class Controlador {
             consulta.setString(4,usu.getUserMail());
             int insertedRows=consulta.executeUpdate();
             System.out.println("Actualizaciones: "+insertedRows);
-            Controlador.volverYLimpiarButton(edUsu);
+            Controlador.volverYLimpiarButton(edUsuPubli);
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
             errorNewUsu.setTitle("ERROR");
