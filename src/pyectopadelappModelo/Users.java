@@ -10,6 +10,7 @@ public class Users {
     private String userName;
     private String userSurname;
     private String userMail;
+    private String userPass;
     private int userStatus;
     private int isAdmin;
 
@@ -46,6 +47,13 @@ public class Users {
     }
     public void setUserMail(String userMail) {
         this.userMail = userMail;
+    }
+
+    public String getUserPass() {
+        return userPass;
+    }
+    public void setUserPass(String userPass) {
+        this.userPass = userPass;
     }
 
     public int getUserStatus() {

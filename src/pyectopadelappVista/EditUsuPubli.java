@@ -145,9 +145,9 @@ public class EditUsuPubli extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(EditUsuMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(changePassUsuPubli)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EditButton)
                     .addComponent(editAtras))
@@ -158,7 +158,7 @@ public class EditUsuPubli extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void EditUsuNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditUsuNameActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_EditUsuNameActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
@@ -178,15 +178,15 @@ public class EditUsuPubli extends javax.swing.JFrame {
     }//GEN-LAST:event_EditUsuDNIActionPerformed
 
     private void EditUsuSurnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditUsuSurnameActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_EditUsuSurnameActionPerformed
 
     private void EditUsuMailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditUsuMailActionPerformed
-        // TODO add your handling code here:
+ 
     }//GEN-LAST:event_EditUsuMailActionPerformed
 
     private void changePassUsuPubliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePassUsuPubliActionPerformed
-        // TODO add your handling code here:
+        Controlador.openChangePass();
     }//GEN-LAST:event_changePassUsuPubliActionPerformed
 
 

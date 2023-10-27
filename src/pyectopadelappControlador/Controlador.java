@@ -6,6 +6,8 @@ import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import pyectopadelappModelo.Pistas;
 import pyectopadelappModelo.Users;
@@ -16,14 +18,12 @@ import pyectopadelappVista.ConfirmacionAlta;
 import pyectopadelappVista.EditPista;
 import pyectopadelappVista.EditUsu;
 import pyectopadelappVista.EditUsuPubli;
-import pyectopadelappVista.ErrorAltaUsuario;
 import pyectopadelappVista.Login;
 import pyectopadelappVista.MenuUsuario;
 import pyectopadelappVista.SeleccionPistaYMes;
 import pyectopadelappVista.PerfilUsuario;
 import pyectopadelappVista.listaUsers;
-import pyectopadelappVista.ErrorAltaPistas;
-import pyectopadelappVista.ErrorDNI;
+import pyectopadelappVista.cambiarPass;
 
 public class Controlador {
     public static Pistas field = new Pistas();
@@ -35,49 +35,21 @@ public class Controlador {
     public static EditPista editField = new EditPista();
     public static EditUsu edUsu = new EditUsu();
     public static EditUsuPubli edUsuPubli = new EditUsuPubli();
-    public static ErrorAltaUsuario errorNewUsu = new ErrorAltaUsuario();
     public static Login login = new Login();
     public static MenuUsuario menuUsu = new MenuUsuario();
     public static SeleccionPistaYMes selectFieldMonth = new SeleccionPistaYMes();
     public static PerfilUsuario profileUsu = new PerfilUsuario();
     public static listaUsers listUsu = new listaUsers();
-    public static ErrorAltaPistas errorNewField = new ErrorAltaPistas();
-    public static ErrorDNI wrongDNI = new ErrorDNI();
+    public static cambiarPass changePass = new cambiarPass();
+    
     
     //Funcion para iniciar el programa
     public static void start(){
         login.setTitle("Login");
         login.setVisible(true);
+        login.errorUsuPassLabel.setVisible(false);
         login.setLocationRelativeTo(null);
-    }
-    //Ventana error usuario
-    public static void errorCreateUser(){
-        newUsu.setVisible(false);
-        errorNewUsu.setTitle("ERROR");
-        errorNewUsu.setVisible(true);
-        errorNewUsu.setLocationRelativeTo(null);
-    }
-    //Cerrar ventana error
-    public static void closeErrorAddUsu(){
-        errorNewUsu.setVisible(false);
-        newUsu.setVisible(true);
-        newUsu.setTitle("Nuevo usuario");
-        newUsu.setLocationRelativeTo(null);
-    }
-    //Ventana error pista
-    public static void errorAddField(){
-        newField.setVisible(false);
-        errorNewField.setTitle("ERROR");
-        errorNewField.setVisible(true);
-        errorNewField.setLocationRelativeTo(null);
-    }
-    //Cerrar ventana error
-    public static void closeErrorAddField(){
-        errorNewField.setVisible(false);
-        newField.setVisible(true);
-        newField.setTitle("Nueva pista");
-        newField.setLocationRelativeTo(null);
-    }
+    }   
     //Menu Principal del Admin
     public static void adminMenu(){
         login.setVisible(false);
@@ -90,6 +62,8 @@ public class Controlador {
         adminIndex.setVisible(false);
         newUsu.setVisible(true);
         newUsu.setTitle("Nuevo usuario");
+        newUsu.errorAltaUser.setVisible(false);
+        newUsu.errorDniNie.setVisible(false);
         newUsu.setLocationRelativeTo(null);
     }
     //Abrir listado de usuarios para posterior edicion
@@ -119,6 +93,12 @@ public class Controlador {
         newField.setVisible(true);
         newField.setTitle("Añadir pista");
         newField.setLocationRelativeTo(null);
+        newField.IDNuevaPista.setEditable(false);
+        try {
+            Controlador.newFieldCode();
+        } catch (SQLException ex) {
+            Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     //Abrir edicion de pista
     public static void editarField(){
@@ -147,35 +127,38 @@ public class Controlador {
         newUsu.AltaUsuSurname.setText("");
         newUsu.AltaUsuMail.setText("");
     }
-    //Abrir ventana error
-    public static void DNIerroneo(){
-        newUsu.setVisible(false);
-        wrongDNI.setTitle("ERROR");
-        wrongDNI.setVisible(true);
-        wrongDNI.setLocationRelativeTo(null);
+    //Abrir cambio de pass
+    public static void openChangePass(){
+        edUsuPubli.setVisible(false);
+        changePass.setVisible(true);
+        changePass.setTitle("Cambiar contraseña");
+        changePass.errorCheckPass.setVisible(false);
+        changePass.errorNewPass.setVisible(false);
+        changePass.setLocationRelativeTo(null);
     }
-    //Atras ventana error DNI
-    public static void closeErrorDNI(){
-        wrongDNI.setVisible(false);
-        newUsu.setVisible(true);
-        newUsu.setTitle("Nuevo usuario");
-        newUsu.setLocationRelativeTo(null);
+    //Atras cambiar pass
+    public static void atrasChangePass(){
+        changePass.setVisible(false);
+        edUsuPubli.setVisible(true);
+        edUsuPubli.setTitle("Editar Datos");
+        edUsuPubli.setLocationRelativeTo(null);
     }
     //Inicio de de sesion y comprobacion de rol
     public static void login()throws SQLException, ClassNotFoundException{
         String dniLogin = login.LogInDNI.getText();
-        String codigoLogin = login.LogInPass.getText();
+        String passLogin = login.LogInPass.getText();
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
-            String query = "SELECT status, isAdmin FROM users where dni='"+dniLogin+"'AND userCode='"+codigoLogin+"';";
+            String query = "SELECT status, isAdmin, userCode FROM users where dni='"+dniLogin+"'AND userPass='"+passLogin+"';";
             Statement state= con.createStatement();
             ResultSet result = state.executeQuery(query);
             if(result.next()){
                 if (result.getInt("status")==1){
-                    usu.setUserCode(Integer.parseInt(codigoLogin));
+                    usu.setUserPass(passLogin);
                     if(result.getInt("isAdmin")==1){
                         usu.setIsAdmin(1);
+                        usu.setUserCode(result.getInt("userCode"));
                         adminIndex.setTitle("Centro de administracion");
                         login.setVisible(false);
                         adminIndex.setVisible(true);
@@ -183,6 +166,7 @@ public class Controlador {
                         login.LogInPass.setText("");
                     }else{
                         usu.setIsAdmin(0);
+                        usu.setUserCode(result.getInt("userCode"));
                         menuUsu.setTitle("Menu Principal");
                         login.setVisible(false);
                         menuUsu.setVisible(true);
@@ -191,7 +175,9 @@ public class Controlador {
                     }
                 }
             }else{
-                System.out.println("Usuario o contraseña incorrecto");
+                login.LogInDNI.setText("");
+                login.LogInPass.setText("");
+                login.errorUsuPassLabel.setVisible(true);
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
@@ -256,15 +242,16 @@ public class Controlador {
         usu.setUserMail(newUsu.AltaUsuMail.getText());
         usu.setUserStatus(1);
         try{
-            if (validarDNI(usu.getUserDNI())== true){
+            //if (validarDNI(usu.getUserDNI())== true){
                 Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
-                String query= "INSERT INTO users (dni,name,surname,mail,status) VALUES (?,?,?,?,?)";
+                String query= "INSERT INTO users (dni,name,surname,mail,usserPass, status) VALUES (?,?,?,?,?,?)";
                 PreparedStatement consulta = con.prepareStatement(query);
                 consulta.setString(1, usu.getUserDNI());
                 consulta.setString(2, usu.getUserName());
                 consulta.setString(3, usu.getUserSurname());
                 consulta.setString(4, usu.getUserMail());
-                consulta.setInt(5, 1);
+                consulta.setString(5, usu.getUserDNI());
+                consulta.setInt(6, 1);
                 int addedRows = consulta.executeUpdate();
                 System.out.println("Añadidas correctamente: "+addedRows);
                 //Aqui hay que añadir para que inicie el controlador, para que resetee
@@ -274,7 +261,7 @@ public class Controlador {
                 confirmAlta.uCode.setHorizontalAlignment(JTextField.CENTER);
                 Controlador.generatedUserCod(dniBuscar);
                 Controlador.resetValuesAddUser();
-            }else if(validarNIE(usu.getUserDNI())== true){
+            /*}else if(validarNIE(usu.getUserDNI())== true){
                 Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
                 String query= "INSERT INTO users (dni,name,surname,mail,status) VALUES (?,?,?,?,?)";
                 PreparedStatement consulta = con.prepareStatement(query);
@@ -293,13 +280,15 @@ public class Controlador {
                 Controlador.generatedUserCod(dniBuscar);
                 Controlador.resetValuesAddUser(); 
             }else{
-                newUsu.setVisible(false);
-                wrongDNI.setVisible(true);
-                wrongDNI.setTitle("ERROR");
-            }
+                    newUsu.errorDniNie.setVisible(true);
+                    newUsu.AltaUsuDNI.setText("");
+            }*/
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
-            Controlador.errorCreateUser();
+            newUsu.errorAltaUser.setVisible(true);
+            newUsu.AltaUsuDNI.setText("");
+            newUsu.AltaUsuMail.setText("");
+            
         }
     }
     //Muestra el codigo del usuario registrador
@@ -321,6 +310,22 @@ public class Controlador {
         }catch(Exception ex){
             JOptionPane.showMessageDialog(null,"No se ha podido mostrar el codigo en la conexion a la base de datos"+ex.getMessage());
         }
+    }
+    //Mostrara el codigo de la nueva pista a genrar
+    public static void newFieldCode()throws SQLException{
+        try{
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+            String query="SELECT MAX(field_code) AS field_code FROM fields;";
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            if (result.next()){
+                int codigoFields = result.getInt("field_code");
+                newField.IDNuevaPista.setText(""+(codigoFields+1));
+            }
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"ERROR: "+ex.getMessage());
+        }
+   
     }
     //Limpiar todos los campos
     public static void lmpiarTextFields(Container container){
@@ -357,26 +362,23 @@ public class Controlador {
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
             field.setCodPista(Integer.parseInt(newField.IDNuevaPista.getText()));
             if (newField.NuevaPistaReady.isSelected()){
-                String query = "INSERT INTO fields (field_code, status) VALUES (?,?)";
+                String query = "INSERT INTO fields (status) VALUES (?)";
                 PreparedStatement consulta = con.prepareStatement(query);
-                consulta.setInt(1, field.getCodPista());
-                consulta.setInt(2, 1 );
+                consulta.setInt(1, 1 );
                 int addedRows = consulta.executeUpdate();
                 System.out.println("Añadidas correctamente: "+addedRows);
                 Controlador.volverYLimpiarButton(newField);
             }else{
-                String query = "INSERT INTO fields (field_code, status) VALUES (?,?)";
+                String query = "INSERT INTO fields (status) VALUES (?)";
                 PreparedStatement consulta = con.prepareStatement(query);
-                consulta.setInt(1, field.getCodPista());
-            consulta.setInt(2, 0 );
+                consulta.setInt(1, 0 );
                 int addedRows = consulta.executeUpdate();
                 System.out.println("Añadidas correctamente: "+addedRows);
                 Controlador.volverYLimpiarButton(newField);
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
-            errorNewUsu.setTitle("ERROR");
-            Controlador.errorAddField();
+
         }
     }
     //Lista de usuarios
@@ -401,8 +403,7 @@ public class Controlador {
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
-            errorNewUsu.setTitle("ERROR");
-            Controlador.errorCreateUser();
+
         }
     }
     //Buscar el usuario a editar
@@ -437,8 +438,7 @@ public class Controlador {
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
-            errorNewUsu.setTitle("ERROR");
-            Controlador.errorCreateUser();
+
         }
     }
     //Guardar los datos editados en la edicion
@@ -465,8 +465,6 @@ public class Controlador {
             Controlador.volverYLimpiarButton(edUsu);
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
-            errorNewUsu.setTitle("ERROR");
-            Controlador.errorCreateUser();
         }
     }
     //Cargar los datos personales en el perfil del usuario
@@ -502,8 +500,7 @@ public class Controlador {
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos "+ex.getMessage());
-            errorNewUsu.setTitle("ERROR");
-            Controlador.errorCreateUser();
+
         }
     }
     //abrir y cargar datos del usuario
@@ -534,9 +531,48 @@ public class Controlador {
             Controlador.volverYLimpiarButton(edUsuPubli);
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
-            errorNewUsu.setTitle("ERROR");
-            Controlador.errorCreateUser();
+
         }
     }
-    
+    //Funcion que cambia la pass si se cumplen todas las condiciones
+    public static void confirmarCambiarPass()throws SQLException{
+        try{
+        Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+        String query = "SELECT userPass FROM users WHERE userCode="+usu.getUserCode()+";";
+        PreparedStatement consulta = con.prepareStatement(query);
+        ResultSet result = consulta.executeQuery();
+        if(result.next()){
+           String passUsu = result.getString("userPass");
+           String passActual = changePass.currentPass.getText();
+            if(passUsu.equals(passActual)){
+                String newPass = changePass.newPass.getText();
+                String passCheck = changePass.newPassCheck.getText();
+                if (newPass.equals(passCheck)){
+                    String updateQuery= "UPDATE users SET userPass = ? WHERE dni ="+usu.getUserDNI()+";";
+                    PreparedStatement consultaDos = con.prepareStatement(updateQuery);
+                    consultaDos.setString(1,newPass);
+                    consultaDos.executeUpdate();
+                    changePass.setVisible(false);
+                    edUsuPubli.setVisible(true);
+                    edUsuPubli.setTitle("Mi perfil");
+                    edUsuPubli.setLocationRelativeTo(null);
+                    
+                }else{
+                    changePass.currentPass.setText("");
+                    changePass.newPass.setText("");
+                    changePass.newPassCheck.setText("");
+                    changePass.errorNewPass.setVisible(true);
+                }
+            }else{
+                changePass.currentPass.setText("");
+                changePass.newPass.setText("");
+                changePass.newPassCheck.setText("");
+                changePass.errorCheckPass.setVisible(true);
+            }
+        }
+            
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"ERROR: "+ex.getMessage());
+        }
+    }
 }
