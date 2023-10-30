@@ -69,7 +69,7 @@ public class MenuUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuReservarPistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservarPistaActionPerformed
-        
+        Controlador.abrirReserva();
     }//GEN-LAST:event_menuReservarPistaActionPerformed
 
     private void menuPerfilUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPerfilUsuActionPerformed

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -146,6 +147,16 @@ public class Controlador {
         edUsuPubli.setVisible(true);
         edUsuPubli.setTitle("Editar Datos");
         edUsuPubli.setLocationRelativeTo(null);
+    }
+    public static void abrirReserva(){
+        menuUsu.setVisible(false);
+        selectFieldMonth.calendarioPistas.setWeekOfYearVisible(false);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        selectFieldMonth.calendarioPistas.setMinSelectableDate(calendar.getTime());
+        selectFieldMonth.setTitle("Reservas");
+        selectFieldMonth.setVisible(true);
+        selectFieldMonth.setLocationRelativeTo(null);
     }
     //Inicio de de sesion y comprobacion de rol
     public static void login()throws SQLException, ClassNotFoundException{
