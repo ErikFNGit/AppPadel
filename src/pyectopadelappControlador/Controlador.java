@@ -2,10 +2,13 @@ package pyectopadelappControlador;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -24,6 +27,7 @@ import pyectopadelappVista.SeleccionPistaYMes;
 import pyectopadelappVista.PerfilUsuario;
 import pyectopadelappVista.listaUsers;
 import pyectopadelappVista.cambiarPass;
+
 
 public class Controlador {
     public static Pistas field = new Pistas();
@@ -158,7 +162,7 @@ public class Controlador {
                     usu.setUserPass(passLogin);
                     if(result.getInt("isAdmin")==1){
                         usu.setIsAdmin(1);
-                        usu.setUserCode(result.getInt("userCode"));
+                        //usu.setUserCode(result.getInt("userCode"));
                         adminIndex.setTitle("Centro de administracion");
                         login.setVisible(false);
                         adminIndex.setVisible(true);
@@ -384,23 +388,23 @@ public class Controlador {
     //Lista de usuarios
     public static void listUsers(){
         try{
+            ArrayList<String> datosList = new ArrayList<>();
             Controlador.listaDeUsers();
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
             String query= "SELECT userCode, name, surname FROM users";
             PreparedStatement consulta = con.prepareStatement(query);
             ResultSet result = consulta.executeQuery();
+            listUsu.listaUsus.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+            listUsu.listaUsus.setLayoutOrientation(JList.VERTICAL);
             while(result.next()){
                 String userCode = result.getString("userCode");
                 String name = result.getString("name");
                 String surname = result.getString("surname");
-                listUsu.listaUsuarios.append("Codigo: "+userCode+"\n");
-                listUsu.listaUsuarios.append("Nombre: "+name+"\n");
-                listUsu.listaUsuarios.append("Apellido: "+surname+"\n");                
-                listUsu.listaUsuarios.append("~~~~~~~~~~~~\n");
-                System.out.println(userCode);
-                System.out.println(name);
-                System.out.println(surname);
+                String datos = name+" "+surname+" "+userCode;
+                datosList.add(datos);
             }
+            String[] datos = datosList.toArray(new String [datosList.size()]);
+            listUsu.listaUsus.setListData(datos);
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
 
@@ -408,11 +412,27 @@ public class Controlador {
     }
     //Buscar el usuario a editar
     public static void cargarDatosEditar() throws SQLException{
+        listUsu.buscarUsuario.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedIndex=listUsu.listaUsus.getSelectedIndex();
+                System.out.println(selectedIndex);
+                if(selectedIndex != -1){
+                    String selectedElement = listUsu.listaUsus.getModel().getElementAt(selectedIndex);
+                    System.out.println(selectedElement);
+                    String [] partes = selectedElement.split(" ");
+                    
+                    if (partes.length >= 3){
+                        String userCode = partes[2];
+                        usu.setUserCode(Integer.parseInt(userCode));
+                    }
+                }
+            }
+        });
         Controlador.editarUsu();
         try{
             edUsu.buttonGroupEditar.add(edUsu.AmonestadoCheck);
             edUsu.buttonGroupEditar.add(edUsu.CorrectoCheck);
-            usu.setUserCode(Integer.parseInt(listUsu.searchUsers.getText()));
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
             String query= "SELECT userCode, name, surname, mail, status FROM users WHERE userCode='"+usu.getUserCode()+"';";
             PreparedStatement consulta = con.prepareStatement(query);

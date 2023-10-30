@@ -18,24 +18,34 @@ public class listaUsers extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listaUsuarios = new javax.swing.JTextArea();
-        searchUsers = new javax.swing.JTextField();
         buscarUsuario = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listaUsus = new javax.swing.JList<>();
+        listaUsusAtras = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Lista de Usuarios");
 
-        listaUsuarios.setColumns(20);
-        listaUsuarios.setRows(5);
-        jScrollPane1.setViewportView(listaUsuarios);
-
         buscarUsuario.setText("Buscar");
         buscarUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buscarUsuarioActionPerformed(evt);
+            }
+        });
+
+        listaUsus.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(listaUsus);
+
+        listaUsusAtras.setText("Atras");
+        listaUsusAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listaUsusAtrasActionPerformed(evt);
             }
         });
 
@@ -46,16 +56,13 @@ public class listaUsers extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(searchUsers))
-                        .addGap(18, 18, 18)
-                        .addComponent(buscarUsuario)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                        .addComponent(buscarUsuario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(listaUsusAtras)))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -63,12 +70,12 @@ public class listaUsers extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buscarUsuario))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15))
+                    .addComponent(buscarUsuario)
+                    .addComponent(listaUsusAtras))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();
@@ -82,13 +89,21 @@ public class listaUsers extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_buscarUsuarioActionPerformed
 
+    private void listaUsusAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaUsusAtrasActionPerformed
+       try {
+            Controlador.volverYLimpiarButton(Controlador.listUsu);
+        } catch (SQLException ex) {
+            Logger.getLogger(EditUsu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_listaUsusAtrasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buscarUsuario;
+    public javax.swing.JButton buscarUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    public javax.swing.JTextArea listaUsuarios;
-    public javax.swing.JTextField searchUsers;
+    public javax.swing.JList<String> listaUsus;
+    public javax.swing.JButton listaUsusAtras;
     // End of variables declaration//GEN-END:variables
 
 }
