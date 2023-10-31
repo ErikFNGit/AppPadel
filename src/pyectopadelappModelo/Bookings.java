@@ -1,22 +1,40 @@
 package pyectopadelappModelo;
+import java.util.Date;
+
 
 
 public class Bookings {
-    private int HoraInicio;
-    private int HoraFin;
+    private String HoraInicio;
+    private String HoraFin;
     private int codUsuReserva;
+    private Date diaReserva;
+    private int pistaLibreCod;
 
-    public int getHoraInicio() {
+    public Date getDiaReserva() {
+        return diaReserva;
+    }
+    public void setDiaReserva(Date diaReserva) {
+        this.diaReserva = diaReserva;
+    }
+
+    public int getPistaLibreCod() {
+        return pistaLibreCod;
+    }
+    public void setPistaLibreCod(int pistaLibreCod) {
+        this.pistaLibreCod = pistaLibreCod;
+    }  
+    
+    public String getHoraInicio() {
         return HoraInicio;
     }
-    public void setHoraInicio(int HoraInicio) {
+    public void setHoraInicio(String HoraInicio) {
         this.HoraInicio = HoraInicio;
     }
 
-    public int getHoraFin() {
+    public String getHoraFin() {
         return HoraFin;
     }
-    public void setHoraFin(int HoraFin) {
+    public void setHoraFin(String HoraFin) {
         this.HoraFin = HoraFin;
     }
 
