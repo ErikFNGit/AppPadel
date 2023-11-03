@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import pyectopadelappModelo.Pistas;
@@ -32,6 +34,7 @@ import pyectopadelappVista.PerfilUsuario;
 import pyectopadelappVista.listaUsers;
 import pyectopadelappVista.cambiarPass;
 import pyectopadelappVista.DatosReserva;
+import pyectopadelappVista.EliminarReservaOk;
 import pyectopadelappVista.ListaDeReservas;
 
 public class Controlador {
@@ -53,6 +56,7 @@ public class Controlador {
     public static cambiarPass changePass = new cambiarPass();
     public static DatosReserva datosReserva = new DatosReserva();
     public static ListaDeReservas listaBookings = new ListaDeReservas();
+    public static EliminarReservaOk eliminarReserva = new EliminarReservaOk();
     
     
     //Funcion para iniciar el programa
@@ -61,7 +65,19 @@ public class Controlador {
         login.setVisible(true);
         login.errorUsuPassLabel.setVisible(false);
         login.setLocationRelativeTo(null);
-    }   
+    }
+    //Abrir Eliminar Reserva
+    public static void openEliminar(){
+        listaBookings.setVisible(false);
+        eliminarReserva.setVisible(true);
+        eliminarReserva.setTitle("Cancelar Reserva");
+        eliminarReserva.setLocationRelativeTo(null);
+    }
+    //Atras Eliminar
+    public static void atrasEliminar() throws SQLException{
+        eliminarReserva.setVisible(false);
+        Controlador.listReservas();
+    }
     //Menu Principal del Admin
     public static void adminMenu(){
         login.setVisible(false);
@@ -76,6 +92,7 @@ public class Controlador {
         newUsu.setTitle("Nuevo usuario");
         newUsu.errorAltaUser.setVisible(false);
         newUsu.errorDniNie.setVisible(false);
+        newUsu.errorCorreo.setVisible(false);
         newUsu.setLocationRelativeTo(null);
     }
     //Abrir listado de usuarios para posterior edicion
@@ -293,6 +310,12 @@ public class Controlador {
             return false;
         }
     }
+    public static boolean mailValido (String mail){
+        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(mail);
+        return matcher.matches();
+    }
     // funcion para registrar nuevos usuarios
     public static void createUser() throws SQLException{
         usu.setUserDNI(newUsu.AltaUsuDNI.getText());
@@ -301,7 +324,7 @@ public class Controlador {
         usu.setUserMail(newUsu.AltaUsuMail.getText());
         usu.setUserStatus(1);
         try{
-            //if (validarDNI(usu.getUserDNI())== true){
+            //if (validarDNI(usu.getUserDNI())== true && mailValido(usu.getUsetMail())== true){
                 Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
                 String query= "INSERT INTO users (dni,name,surname,mail,usserPass, status) VALUES (?,?,?,?,?,?)";
                 PreparedStatement consulta = con.prepareStatement(query);
@@ -311,34 +334,21 @@ public class Controlador {
                 consulta.setString(4, usu.getUserMail());
                 consulta.setString(5, usu.getUserDNI());
                 consulta.setInt(6, 1);
-                int addedRows = consulta.executeUpdate();
-                System.out.println("Añadidas correctamente: "+addedRows);
-                //Aqui hay que añadir para que inicie el controlador, para que resetee
-                //los values y se esconda la ventana y salga la de confirmacion de alta
+                consulta.executeUpdate();
                 String dniBuscar = newUsu.AltaUsuDNI.getText();
                 System.out.println(dniBuscar);
                 confirmAlta.uCode.setHorizontalAlignment(JTextField.CENTER);
                 Controlador.generatedUserCod(dniBuscar);
                 Controlador.resetValuesAddUser();
-            /*}else if(validarNIE(usu.getUserDNI())== true){
-                Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
-                String query= "INSERT INTO users (dni,name,surname,mail,status) VALUES (?,?,?,?,?)";
-                PreparedStatement consulta = con.prepareStatement(query);
-                consulta.setString(1, usu.getUserDNI());
-                consulta.setString(2, usu.getUserName());
-                consulta.setString(3, usu.getUserSurname());
-                consulta.setString(4, usu.getUserMail());
-                consulta.setInt(5, 1);
-                int addedRows = consulta.executeUpdate();
-                System.out.println("Añadidas correctamente: "+addedRows);
-                //Aqui hay que añadir para que inicie el controlador, para que resetee
-                //los values y se esconda la ventana y salga la de confirmacion de alta
-                String dniBuscar = newUsu.AltaUsuDNI.getText();
-                System.out.println(dniBuscar);
-                confirmAlta.uCode.setHorizontalAlignment(JTextField.CENTER);
-                Controlador.generatedUserCod(dniBuscar);
-                Controlador.resetValuesAddUser(); 
-            }else{
+            /*}else if(validarNIE(usu.getUserDNI())== true && mailValido(usu.getUsetMail())== false){
+                newUsu.errorCorreo.setVisible(true);
+                newUsu.errorCorreo.setText("")
+            }else if (validarNIE(usu.getUserDNI())== false && mailValido(usu.getUsetMail())== false){
+                newUsu.errorDniNie.setVisible(true);
+                newUsu.AltaUsuDNI.setText("");
+                newUsu.errorCorreo.setVisible(true);
+                newUsu.errorCorreo.setText("")
+            }else if(validarNIE(usu.getUserDNI())== false && mailValido(usu.getUsetMail())== true){
                     newUsu.errorDniNie.setVisible(true);
                     newUsu.AltaUsuDNI.setText("");
             }*/
@@ -494,23 +504,17 @@ public class Controlador {
     }
     //Buscar el usuario a editar
     public static void cargarDatosEditar() throws SQLException{
-        listUsu.buscarUsuario.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedIndex=listUsu.listaUsus.getSelectedIndex();
-                System.out.println(selectedIndex);
-                if(selectedIndex != -1){
-                    String selectedElement = listUsu.listaUsus.getModel().getElementAt(selectedIndex);
-                    System.out.println(selectedElement);
-                    String [] partes = selectedElement.split(" ");
-                    
-                    if (partes.length >= 3){
-                        String booking_code = partes[0];
-                        reserva.setCod_booking(Integer.parseInt(booking_code));
-                    }
-                }
+        int selectedIndex=listUsu.listaUsus.getSelectedIndex();
+        System.out.println(selectedIndex);
+        if(selectedIndex != -1){
+            String selectedElement = listUsu.listaUsus.getModel().getElementAt(selectedIndex);
+            System.out.println(selectedElement);
+            String [] partes = selectedElement.split(" ");
+           if (partes.length >= 3){
+                String userCode = partes[2];
+                usu.setUserCode(Integer.parseInt(userCode));
             }
-        });
+        }
         Controlador.editarUsu();
         try{
             edUsu.buttonGroupEditar.add(edUsu.AmonestadoCheck);
@@ -739,34 +743,31 @@ public class Controlador {
     }
     //Funcion para cancelar la reserva
     public static void cancelarReserva () throws SQLException{
-        listaBookings.botonCancelarReserva.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedIndex=listaBookings.listBookings.getSelectedIndex();
-                System.out.println(selectedIndex);
-                if(selectedIndex != -1){
-                    String selectedElement = listaBookings.listBookings.getModel().getElementAt(selectedIndex);
-                    System.out.println(selectedElement);
-                    String [] partes = selectedElement.split(" ");
-                    
-                    if (partes.length >= 5){
-                        String bookingCode = partes[0];
-                        reserva.setCod_booking(Integer.parseInt(bookingCode));
-                    }
-                }
-            try{
+        System.out.println("PRUEBA 1 CLIC");
+        int selectedIndex=listaBookings.listBookings.getSelectedIndex();
+        System.out.println(selectedIndex);
+        if(selectedIndex != -1){
+            String selectedElement = listaBookings.listBookings.getModel().getElementAt(selectedIndex);
+            System.out.println(selectedElement);
+            String [] partes = selectedElement.split(" ");
+            if (partes.length >= 5){
+                String bookingCode = partes[0];
+                reserva.setCod_booking(Integer.parseInt(bookingCode));
+                Controlador.openEliminar();
+            }
+        }
+    }
+
+    public static void confirmarCancelacion()throws SQLException{
+        try{
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
             String query= "DELETE FROM bookings WHERE booking_cod='"+reserva.getCod_booking()+"';";
             PreparedStatement consulta = con.prepareStatement(query);
             consulta.executeUpdate();
-            listaBookings.setVisible(false);
+            eliminarReserva.setVisible(false);
             Controlador.listReservas();
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
-
         }
-            }
-        });
-   
     }
 }
