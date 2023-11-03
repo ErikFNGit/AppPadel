@@ -9,6 +9,16 @@ public class Bookings {
     private int codUsuReserva;
     private Date diaReserva;
     private int pistaLibreCod;
+    private int cod_booking;
+
+    public int getCod_booking() {
+        return cod_booking;
+    }
+    public void setCod_booking(int cod_booking) {
+        this.cod_booking = cod_booking;
+    }
+    
+    
 
     public Date getDiaReserva() {
         return diaReserva;

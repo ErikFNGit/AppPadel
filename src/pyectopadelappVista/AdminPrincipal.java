@@ -109,7 +109,11 @@ public class AdminPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void EditUsuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditUsuButtonActionPerformed
-        Controlador.listUsers();
+        try {
+            Controlador.listUsers();
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_EditUsuButtonActionPerformed
 
     private void AltaUsuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AltaUsuButtonActionPerformed
