@@ -23,6 +23,8 @@ import pyectopadelappModelo.Bookings;
 import pyectopadelappVista.AltaUsu;
 import pyectopadelappVista.AltaPista;
 import pyectopadelappVista.AdminPrincipal;
+import pyectopadelappVista.CalendarioReservasAdmin;
+import pyectopadelappVista.CambiarEstadoPista;
 import pyectopadelappVista.ConfirmacionAlta;
 import pyectopadelappVista.EditPista;
 import pyectopadelappVista.EditUsu;
@@ -34,8 +36,10 @@ import pyectopadelappVista.PerfilUsuario;
 import pyectopadelappVista.listaUsers;
 import pyectopadelappVista.cambiarPass;
 import pyectopadelappVista.DatosReserva;
+import pyectopadelappVista.EditarEstadoPistas;
 import pyectopadelappVista.EliminarReservaOk;
 import pyectopadelappVista.ListaDeReservas;
+import pyectopadelappVista.ListaDeReservasAdmin;
 
 public class Controlador {
     public static Pistas field = new Pistas();
@@ -57,6 +61,10 @@ public class Controlador {
     public static DatosReserva datosReserva = new DatosReserva();
     public static ListaDeReservas listaBookings = new ListaDeReservas();
     public static EliminarReservaOk eliminarReserva = new EliminarReservaOk();
+    public static EditarEstadoPistas editStatusField = new EditarEstadoPistas();
+    public static CalendarioReservasAdmin calendarioAdmin = new CalendarioReservasAdmin();
+    public static ListaDeReservasAdmin listaAdmin = new ListaDeReservasAdmin();
+
     
     
     //Funcion para iniciar el programa
@@ -65,6 +73,21 @@ public class Controlador {
         login.setVisible(true);
         login.errorUsuPassLabel.setVisible(false);
         login.setLocationRelativeTo(null);
+    }
+    //Abrir Editar estado pistas
+    public static void statusFieldChange(){
+        editField.setVisible(false);
+        editStatusField.setTitle("Editar");
+        editStatusField.idPista.setEditable(false);
+        editStatusField.setLocationRelativeTo(null);
+        editStatusField.setVisible(true);
+    }
+    //Atras Editar pistas
+    public static void backStatusFieldChange(){
+        editField.setVisible(true);
+        editField.setTitle("Editar");
+        editField.setLocationRelativeTo(null);
+        editStatusField.setVisible(false);
     }
     //Abrir Eliminar Reserva
     public static void openEliminar(){
@@ -108,6 +131,13 @@ public class Controlador {
         listaBookings.setVisible(true);
         listaBookings.setTitle("Mis reservas");
         listaBookings.setLocationRelativeTo(null);
+    }
+    //Abrir listado de reservas Admin
+    public static void listadoDeReservasAdmin(){
+        calendarioAdmin.setVisible(false);
+        listaAdmin.setVisible(true);
+        listaAdmin.setTitle("Mis reservas");
+        listaAdmin.setLocationRelativeTo(null);
     }
     //Abrir edicion usuario
     public static void editarUsuPubli(){
@@ -191,6 +221,17 @@ public class Controlador {
         selectFieldMonth.setVisible(true);
         selectFieldMonth.setLocationRelativeTo(null);
     }
+    //Abrir calendario admin
+    public static void abrirCalendarioAdmin(){
+        adminIndex.setVisible(false);
+        calendarioAdmin.calendarioPistas.setWeekOfYearVisible(false);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH,1);
+        calendarioAdmin.calendarioPistas.setMinSelectableDate(calendar.getTime());
+        calendarioAdmin.setTitle("Calendario");
+        calendarioAdmin.setVisible(true);
+        calendarioAdmin.setLocationRelativeTo(null);
+    }
     //Abrir reserva post Creacion
     public static void abrirDatosReserva()throws SQLException{
         selectFieldMonth.setVisible(false);
@@ -204,9 +245,10 @@ public class Controlador {
         datosReserva.setLocationRelativeTo(null);
         try{
            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
-            String query = "SELECT booking_cod, fecha, sHour, eHour, fNum FROM bookings WHERE userDNI = "+usu.getUserDNI()+" ORDER BY booking_cod DESC LIMIT 1;";
-            Statement state= con.createStatement();
-            ResultSet result = state.executeQuery(query); 
+            String query = "SELECT booking_cod, fecha, sHour, eHour, fNum FROM bookings WHERE userDNI = ? ORDER BY booking_cod DESC LIMIT 1";
+            PreparedStatement state= con.prepareStatement(query);
+            state.setString(1,usu.getUserDNI());
+            ResultSet result = state.executeQuery(); 
             if(result.next()){
                 datosReserva.idReservaTxt.setText(result.getString("booking_cod"));
                 datosReserva.diaReservaTxt.setText(result.getString("fecha"));
@@ -233,6 +275,7 @@ public class Controlador {
                     usu.setUserPass(passLogin);
                     if(result.getInt("isAdmin")==1){
                         usu.setIsAdmin(1);
+                        usu.setUserDNI(result.getString("dni"));
                         //usu.setUserCode(result.getInt("userCode"));
                         adminIndex.setTitle("Centro de administracion");
                         login.setVisible(false);
@@ -326,7 +369,7 @@ public class Controlador {
         try{
             //if (validarDNI(usu.getUserDNI())== true && mailValido(usu.getUsetMail())== true){
                 Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
-                String query= "INSERT INTO users (dni,name,surname,mail,usserPass, status) VALUES (?,?,?,?,?,?)";
+                String query= "INSERT INTO users (dni,name,surname,mail,userPass, status) VALUES (?,?,?,?,?,?)";
                 PreparedStatement consulta = con.prepareStatement(query);
                 consulta.setString(1, usu.getUserDNI());
                 consulta.setString(2, usu.getUserName());
@@ -479,13 +522,13 @@ public class Controlador {
     public static void listReservas()throws SQLException{
         try{    
             ArrayList<String> datosReservas = new ArrayList<>();
-            Controlador.listadoDeReservas();
+            Controlador.listadoDeReservasAdmin();
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
-            String query= "SELECT booking_cod, fecha, sHour, eHour, fNum FROM bookings WHERE userDNI = '"+usu.getUserDNI()+"'";
+            String query= "SELECT booking_cod, fecha, sHour, eHour, fNum FROM bookings WHERE userDNI = '"+usu.getUserDNI()+"' AND fecha >=DATE_SUB(CURDATE(), INTERVAL 1 DAY)";
             PreparedStatement consulta = con.prepareStatement(query);
             ResultSet result = consulta.executeQuery();
-            listUsu.listaUsus.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-            listUsu.listaUsus.setLayoutOrientation(JList.VERTICAL);
+            listaAdmin.listBookingsAdmin.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+            listaAdmin.listBookingsAdmin.setLayoutOrientation(JList.VERTICAL);
             while(result.next()){
                 String booking_cod = result.getString("booking_cod");
                 String fecha = result.getString("fecha");
@@ -496,10 +539,93 @@ public class Controlador {
                 datosReservas.add(datos);
             }
             String[] datos = datosReservas.toArray(new String [datosReservas.size()]);
-            listaBookings.listBookings.setListData(datos);
+            listaAdmin.listBookingsAdmin.setListData(datos);
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
 
+        }
+    }
+    //Lista de pistas
+     //Lista de reservas
+    public static void listPistas()throws SQLException{
+        try{    
+            ArrayList<String> datosReservas = new ArrayList<>();
+            Controlador.editarField();
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+            String query= "SELECT * FROM fields ";
+            PreparedStatement consulta = con.prepareStatement(query);
+            ResultSet result = consulta.executeQuery();
+            editField.listaPistas.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+            editField.listaPistas.setLayoutOrientation(JList.VERTICAL);
+            while(result.next()){
+                String field_cod = result.getString("field_code");
+                String status = result.getString("status");
+                String datos = field_cod+" "+status;
+                datosReservas.add(datos);
+            }
+            String[] datos = datosReservas.toArray(new String [datosReservas.size()]);
+            editField.listaPistas.setListData(datos);
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
+
+        }
+    }
+    //Buscar la pista a editar
+    public static void cargarDatosPistaEditar () throws SQLException{
+     int selectedIndex= editField.listaPistas.getSelectedIndex();
+     if(selectedIndex != -1){
+            String selectedElement = editField.listaPistas.getModel().getElementAt(selectedIndex);
+            System.out.println(selectedElement);
+            String [] partes = selectedElement.split(" ");
+           if (partes.length >= 2){
+                String userCode = partes[0];
+                field.setCodPista(Integer.parseInt(userCode));
+            }
+        }
+     Controlador.statusFieldChange();
+      try{
+            editStatusField.buttonGroupDisponible.add(editStatusField.checkDisponible);
+            editStatusField.buttonGroupDisponible.add(editStatusField.checkNoDisponible);
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+            String query= "SELECT field_code, status FROM fields WHERE field_code='"+field.getCodPista()+"';";
+            PreparedStatement consulta = con.prepareStatement(query);
+            ResultSet result = consulta.executeQuery();
+            if(result.next()){
+                String fieldCode = result.getString("field_code");
+                int status = result.getInt("status");
+                editStatusField.idPista.setText(fieldCode);
+                if (status == 0){
+                    editStatusField.checkDisponible.setSelected(false);
+                    editStatusField.checkNoDisponible.setSelected(true);
+                }else if (status == 1){
+                    editStatusField.checkDisponible.setSelected(true);
+                    editStatusField.checkNoDisponible.setSelected(false);
+                }
+
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
+
+        }
+    }
+    //Guardar datos Pista editados
+    public static void guardarEdicionPista() throws SQLException{
+        field.setCodPista(Integer.parseInt(editStatusField.idPista.getText()));
+        if (editStatusField.checkDisponible.isSelected()){
+            field.setPistaStatus(1);
+        }else if (editStatusField.checkNoDisponible.isSelected()){
+            field.setPistaStatus(0);
+        }
+        try{
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+            String query= "UPDATE fields SET status=? WHERE field_code='"+field.getCodPista()+"';";
+            PreparedStatement consulta = con.prepareStatement(query);
+            consulta.setInt(1,field.getPistaStatus());
+            int insertedRows=consulta.executeUpdate();
+            System.out.println("Actualizaciones: "+insertedRows);
+            Controlador.volverYLimpiarButton(editStatusField);
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
         }
     }
     //Buscar el usuario a editar
@@ -680,6 +806,42 @@ public class Controlador {
             JOptionPane.showMessageDialog(null,"ERROR: "+ex.getMessage());
         }
     }
+    //Obtener dato calendario para admin
+    public static void obtenerReservasDiaAdmin() throws SQLException{
+        java.util.Date fechaSeleccionada = calendarioAdmin.calendarioPistas.getDate();
+        Date fechaSQL = new Date(fechaSeleccionada.getTime());
+        try{
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
+            String selectQuery= "SELECT * FROM bookings WHERE fecha = ? ";
+            PreparedStatement selectStatement = con.prepareStatement(selectQuery);
+            selectStatement.setDate(1,fechaSQL);
+            ResultSet resultSet = selectStatement.executeQuery();
+            if(resultSet.next()){
+                ArrayList<String> datosReservas = new ArrayList<>();
+                Controlador.listadoDeReservas();      
+                String query= "SELECT * FROM bookings WHERE fecha = ? ";
+                PreparedStatement selectSt = con.prepareStatement(query);
+                selectSt.setDate(1,fechaSQL);
+                ResultSet rs = selectSt.executeQuery();
+                listaBookings.listBookings.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+                listaBookings.listBookings.setLayoutOrientation(JList.VERTICAL);
+                while(rs.next()){
+                    String booking_cod = rs.getString("booking_cod");
+                    String fecha = rs.getString("fecha");
+                    String sHour = rs.getString("sHour");
+                    String eHour = rs.getString("eHour");
+                    String fNum = rs.getString("fNum");
+                    String userDNI = rs.getString("userDNI");
+                    String datos = booking_cod+" "+fecha+" "+sHour+" "+eHour+" "+fNum+" "+userDNI;
+                    datosReservas.add(datos);
+                }
+                String[] datos = datosReservas.toArray(new String [datosReservas.size()]);
+                listaBookings.listBookings.setListData(datos);
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"ERROR en la reserva: "+ex.getMessage());
+        }
+    }
     //Muestra los datos de la reserva
     public static void obtenerDatosReserva() throws SQLException{
         java.util.Date fechaSeleccionada = selectFieldMonth.calendarioPistas.getDate();
@@ -697,14 +859,18 @@ public class Controlador {
             ArrayList<Integer> pistasOcupadas = new ArrayList<>();
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
             String query = "SELECT fNum FROM bookings WHERE fecha='"+fechaSQL+"' AND sHour='"+horaSQLInicio+"' AND eHour='"+horaSQLFin+"';";
+            System.out.println(query);
             PreparedStatement consulta = con.prepareStatement(query);
             ResultSet result = consulta.executeQuery();
             while(result.next()){
                 int codPista = result.getInt("fNum");
                 pistasOcupadas.add(codPista);
+                
             }
+            System.out.println(usu.getIsAdmin());
             String query2;
-            if(pistasOcupadas.isEmpty()){
+            if(pistasOcupadas.isEmpty() || usu.getIsAdmin() == 1){
+                
                 query2="SELECT field_code FROM fields";
             }else{
                 query2= "SELECT field_code FROM fields WHERE field_code NOT IN(";
@@ -715,22 +881,49 @@ public class Controlador {
                     }
                 }
                 query2+=") LIMIT 1;";
+                PreparedStatement pState = con.prepareStatement(query2);
+                for (int i=0;i<pistasOcupadas.size();i++){
+                 pState.setInt(i+1,pistasOcupadas.get(i));
+                }
             }
             PreparedStatement pState = con.prepareStatement(query2);
-            for (int i=0;i<pistasOcupadas.size();i++){
-                pState.setInt(i+1,pistasOcupadas.get(i));
-            }
             ResultSet rs = pState.executeQuery();
             if(rs.next()){
+                System.out.println("Entro al rs.next");
                 reserva.setPistaLibreCod(rs.getInt("field_code"));
-                String query3 = "INSERT INTO bookings (fecha,sHour,eHour,fNum,userDNI) VALUES (?,?,?,?,?)";
-                PreparedStatement consulta3 = con.prepareStatement(query3);
-                consulta3.setDate(1,fechaSQL);
-                consulta3.setTime(2, horaSQLInicio);
-                consulta3.setTime(3, horaSQLFin);
-                consulta3.setInt(4,reserva.getPistaLibreCod());
-                consulta3.setString(5,usu.getUserDNI());
-                consulta3.executeUpdate();
+                String selectQuery= "SELECT * FROM bookings WHERE fecha = ? AND sHour = ? AND eHour= ?";
+                String deleteQuery= "DELETE FROM bookings WHERE fecha = ? AND sHour = ? AND eHour= ?";
+                String insertQuery = "INSERT INTO bookings (fecha,sHour,eHour,fNum,userDNI) VALUES (?,?,?,?,?)";
+                PreparedStatement selectStatement = con.prepareStatement(selectQuery);
+                PreparedStatement deleteStatement = con.prepareStatement(deleteQuery);
+                PreparedStatement insertStatement = con.prepareStatement(insertQuery);
+                selectStatement.setDate(1,fechaSQL);
+                selectStatement.setTime(2, horaSQLInicio); 
+                selectStatement.setTime(3, horaSQLFin);
+                System.out.println(selectQuery);
+                ResultSet resultSet = selectStatement.executeQuery();
+                System.out.println(usu.getUserDNI());
+                if(resultSet.next() && usu.getIsAdmin() == 1 ){
+                    deleteStatement.setDate(1,fechaSQL);
+                    deleteStatement.setTime(2, horaSQLInicio); 
+                    deleteStatement.setTime(3, horaSQLFin);
+                    deleteStatement.executeUpdate();
+                    insertStatement.setDate(1,fechaSQL);
+                    insertStatement.setTime(2, horaSQLInicio); 
+                    insertStatement.setTime(3, horaSQLFin);
+                    insertStatement.setInt(4,reserva.getPistaLibreCod());
+                    insertStatement.setString(5,usu.getUserDNI());
+                    insertStatement.executeUpdate();
+                }else if(resultSet.next() && usu.getIsAdmin() == 0 ){
+                    selectFieldMonth.noPistas.setVisible(true);
+                }else{
+                    insertStatement.setDate(1,fechaSQL);
+                    insertStatement.setTime(2, horaSQLInicio); 
+                    insertStatement.setTime(3, horaSQLFin);
+                    insertStatement.setInt(4,reserva.getPistaLibreCod());
+                    insertStatement.setString(5,usu.getUserDNI());
+                    insertStatement.executeUpdate();
+                }            
                 selectFieldMonth.setVisible(false);
                 Controlador.abrirDatosReserva();
             }else{
@@ -738,12 +931,11 @@ public class Controlador {
             }
             con.close();
         }catch (SQLException ex){
-            JOptionPane.showMessageDialog(null,"ERROR: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null,"ERROR en la reserva: "+ex.getMessage());
         }
     }
-    //Funcion para cancelar la reserva
+    //Funciones para cancelar la reserva
     public static void cancelarReserva () throws SQLException{
-        System.out.println("PRUEBA 1 CLIC");
         int selectedIndex=listaBookings.listBookings.getSelectedIndex();
         System.out.println(selectedIndex);
         if(selectedIndex != -1){
@@ -757,7 +949,6 @@ public class Controlador {
             }
         }
     }
-
     public static void confirmarCancelacion()throws SQLException{
         try{
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
@@ -765,9 +956,14 @@ public class Controlador {
             PreparedStatement consulta = con.prepareStatement(query);
             consulta.executeUpdate();
             eliminarReserva.setVisible(false);
-            Controlador.listReservas();
+            if(usu.getIsAdmin()!= 1){
+                Controlador.listReservas();
+            }else if (usu.getIsAdmin()==1){
+                Controlador.abrirCalendarioAdmin();
+            }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
         }
     }
+
 }
