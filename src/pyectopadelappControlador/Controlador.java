@@ -128,9 +128,9 @@ public class Controlador {
     //Abrir listado de reservas
     public static void listadoDeReservas(){
         profileUsu.setVisible(false);
-        listaBookings.setVisible(true);
-        listaBookings.setTitle("Mis reservas");
-        listaBookings.setLocationRelativeTo(null);
+        listaAdmin.setVisible(true);
+        listaAdmin.setTitle("Mis reservas");
+        listaAdmin.setLocationRelativeTo(null);
     }
     //Abrir listado de reservas Admin
     public static void listadoDeReservasAdmin(){
@@ -818,13 +818,13 @@ public class Controlador {
             ResultSet resultSet = selectStatement.executeQuery();
             if(resultSet.next()){
                 ArrayList<String> datosReservas = new ArrayList<>();
-                Controlador.listadoDeReservas();      
+                Controlador.listadoDeReservasAdmin();      
                 String query= "SELECT * FROM bookings WHERE fecha = ? ";
                 PreparedStatement selectSt = con.prepareStatement(query);
                 selectSt.setDate(1,fechaSQL);
                 ResultSet rs = selectSt.executeQuery();
-                listaBookings.listBookings.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-                listaBookings.listBookings.setLayoutOrientation(JList.VERTICAL);
+                listaAdmin.listBookingsAdmin.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+                listaAdmin.listBookingsAdmin.setLayoutOrientation(JList.VERTICAL);
                 while(rs.next()){
                     String booking_cod = rs.getString("booking_cod");
                     String fecha = rs.getString("fecha");
@@ -836,7 +836,7 @@ public class Controlador {
                     datosReservas.add(datos);
                 }
                 String[] datos = datosReservas.toArray(new String [datosReservas.size()]);
-                listaBookings.listBookings.setListData(datos);
+                 listaAdmin.listBookingsAdmin.setListData(datos);
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"ERROR en la reserva: "+ex.getMessage());
@@ -936,10 +936,10 @@ public class Controlador {
     }
     //Funciones para cancelar la reserva
     public static void cancelarReserva () throws SQLException{
-        int selectedIndex=listaBookings.listBookings.getSelectedIndex();
+        int selectedIndex=listaAdmin.listBookingsAdmin.getSelectedIndex();
         System.out.println(selectedIndex);
         if(selectedIndex != -1){
-            String selectedElement = listaBookings.listBookings.getModel().getElementAt(selectedIndex);
+            String selectedElement = listaAdmin.listBookingsAdmin.getModel().getElementAt(selectedIndex);
             System.out.println(selectedElement);
             String [] partes = selectedElement.split(" ");
             if (partes.length >= 5){
@@ -956,10 +956,11 @@ public class Controlador {
             PreparedStatement consulta = con.prepareStatement(query);
             consulta.executeUpdate();
             eliminarReserva.setVisible(false);
-            if(usu.getIsAdmin()!= 1){
-                Controlador.listReservas();
-            }else if (usu.getIsAdmin()==1){
+            if(usu.getIsAdmin()== 1){
                 Controlador.abrirCalendarioAdmin();
+                
+            }else{
+                Controlador.listadoDeReservas();
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());

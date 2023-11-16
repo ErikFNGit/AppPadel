@@ -131,7 +131,7 @@ public class ListaDeReservasAdmin extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     public javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JList<String> listBookingsAdmin;
     // End of variables declaration//GEN-END:variables
 }

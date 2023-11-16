@@ -129,7 +129,7 @@ public class ListaDeReservas extends javax.swing.JFrame {
     public javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     public javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JList<String> listBookings;
     // End of variables declaration//GEN-END:variables
 }
