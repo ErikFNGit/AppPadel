@@ -134,7 +134,11 @@ public class Controlador {
     }
     //Abrir listado de reservas Admin
     public static void listadoDeReservasAdmin(){
-        calendarioAdmin.setVisible(false);
+        if(usu.getIsAdmin()==1){
+            calendarioAdmin.setVisible(false);
+        }else{
+            profileUsu.setVisible(false);
+        }
         listaAdmin.setVisible(true);
         listaAdmin.setTitle("Mis reservas");
         listaAdmin.setLocationRelativeTo(null);
@@ -531,11 +535,13 @@ public class Controlador {
             listaAdmin.listBookingsAdmin.setLayoutOrientation(JList.VERTICAL);
             while(result.next()){
                 String booking_cod = result.getString("booking_cod");
-                String fecha = result.getString("fecha");
-                String sHour = result.getString("sHour");
-                String eHour = result.getString("eHour");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
+                String fecha = sdf.format(result.getDate("fecha"));
+                String sHour = sdfHora.format(result.getTime("sHour"));
+                String eHour = sdfHora.format(result.getTime("eHour"));
                 String fNum = result.getString("fNum");
-                String datos = booking_cod+" "+fecha+" "+sHour+" "+eHour+" "+fNum;
+                String datos = booking_cod+ " - Tiene su reserva el dia "+fecha+" de "+sHour+" a "+eHour+" en la pista nº "+fNum;
                 datosReservas.add(datos);
             }
             String[] datos = datosReservas.toArray(new String [datosReservas.size()]);
@@ -769,17 +775,24 @@ public class Controlador {
     public static void confirmarCambiarPass()throws SQLException{
         try{
         Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
-        String query = "SELECT userPass FROM users WHERE userCode="+usu.getUserCode()+";";
+        String query = "SELECT userPass FROM users WHERE userCode=?;";
         PreparedStatement consulta = con.prepareStatement(query);
+        consulta.setInt(1, usu.getUserCode());
         ResultSet result = consulta.executeQuery();
+            System.out.println("estoy en confirmarCambiarPass");
+            System.out.println(query);
+            System.out.println(usu.getUserCode());
         if(result.next()){
+            System.out.println("Estoy en el result.next");
            String passUsu = result.getString("userPass");
            String passActual = changePass.currentPass.getText();
             if(passUsu.equals(passActual)){
+                System.out.println("Estoy en el if PassUsu.equals");
                 String newPass = changePass.newPass.getText();
                 String passCheck = changePass.newPassCheck.getText();
                 if (newPass.equals(passCheck)){
-                    String updateQuery= "UPDATE users SET userPass = ? WHERE dni ="+usu.getUserDNI()+";";
+                    System.out.println("Estoy en el pass chek if");
+                    String updateQuery= "UPDATE users SET userPass = ? WHERE userCode ="+usu.getUserCode()+";";
                     PreparedStatement consultaDos = con.prepareStatement(updateQuery);
                     consultaDos.setString(1,newPass);
                     consultaDos.executeUpdate();
@@ -789,12 +802,14 @@ public class Controlador {
                     edUsuPubli.setLocationRelativeTo(null);
                     
                 }else{
+                    System.out.println("Else del pass check if");
                     changePass.currentPass.setText("");
                     changePass.newPass.setText("");
                     changePass.newPassCheck.setText("");
                     changePass.errorNewPass.setVisible(true);
                 }
             }else{
+                System.out.println("Else if passUsu.equals");
                 changePass.currentPass.setText("");
                 changePass.newPass.setText("");
                 changePass.newPassCheck.setText("");
@@ -827,7 +842,8 @@ public class Controlador {
                 listaAdmin.listBookingsAdmin.setLayoutOrientation(JList.VERTICAL);
                 while(rs.next()){
                     String booking_cod = rs.getString("booking_cod");
-                    String fecha = rs.getString("fecha");
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                    String fecha = sdf.format(rs.getDate("fecha"));
                     String sHour = rs.getString("sHour");
                     String eHour = rs.getString("eHour");
                     String fNum = rs.getString("fNum");
@@ -858,35 +874,40 @@ public class Controlador {
         try{
             ArrayList<Integer> pistasOcupadas = new ArrayList<>();
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost/padelapp","root","");
-            String query = "SELECT fNum FROM bookings WHERE fecha='"+fechaSQL+"' AND sHour='"+horaSQLInicio+"' AND eHour='"+horaSQLFin+"';";
+            String query = "SELECT fNum FROM bookings WHERE fecha='"+fechaSQL+"' AND sHour>='"+horaSQLInicio+"' AND eHour<='"+horaSQLFin+"';";
             System.out.println(query);
             PreparedStatement consulta = con.prepareStatement(query);
             ResultSet result = consulta.executeQuery();
             while(result.next()){
                 int codPista = result.getInt("fNum");
                 pistasOcupadas.add(codPista);
-                
             }
             System.out.println(usu.getIsAdmin());
             String query2;
+            PreparedStatement pState = null;
             if(pistasOcupadas.isEmpty() || usu.getIsAdmin() == 1){
-                
                 query2="SELECT field_code FROM fields";
             }else{
                 query2= "SELECT field_code FROM fields WHERE field_code NOT IN(";
-                for(int i=0; i<pistasOcupadas.size();i++){
-                    query2+="?";
-                    if(i<pistasOcupadas.size()-1){
-                        query2+=",";
+                for (int i = 0; i < pistasOcupadas.size(); i++) {
+                    query2 += "?";
+                    if (i < pistasOcupadas.size() - 1) {
+                        query2 += ",";
                     }
                 }
-                query2+=") LIMIT 1;";
-                PreparedStatement pState = con.prepareStatement(query2);
+                query2+=")AND status = '1' LIMIT 1 ;";
+                System.out.println(query2);
+                pState = con.prepareStatement(query2);
                 for (int i=0;i<pistasOcupadas.size();i++){
                  pState.setInt(i+1,pistasOcupadas.get(i));
                 }
             }
-            PreparedStatement pState = con.prepareStatement(query2);
+            if (pState == null) {
+                query2 = "SELECT field_code FROM fields";
+                pState = con.prepareStatement(query2);
+            }
+            System.out.println(query2);
+            System.out.println(pistasOcupadas);
             ResultSet rs = pState.executeQuery();
             if(rs.next()){
                 System.out.println("Entro al rs.next");
@@ -958,9 +979,11 @@ public class Controlador {
             eliminarReserva.setVisible(false);
             if(usu.getIsAdmin()== 1){
                 Controlador.abrirCalendarioAdmin();
-                
             }else{
-                Controlador.listadoDeReservas();
+                listaAdmin.setVisible(false);
+                profileUsu.setVisible(true);
+                profileUsu.setTitle("Mi perfil");
+                profileUsu.setLocationRelativeTo(null);
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"No se ha podido establecer la conexion a la base de datos"+ex.getMessage());
